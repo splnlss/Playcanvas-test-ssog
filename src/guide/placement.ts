@@ -1,11 +1,11 @@
 import type { Vec3Tuple } from '../movement';
 import type { GuidePose } from './sequence';
 
-export type GuidePlacement = { origin: Vec3Tuple; yaw: number; seatHeight: number };
+export type GuidePlacement = { origin: Vec3Tuple; yaw: number; seatHeight: number; shadowGroundY?: number };
 const fixture: GuidePlacement = { origin: [0, 0, 0], yaw: 0, seatHeight: 0.6 };
 // Authored from depth picks of the pipe in the user's saved Ronda opening view.
 // The origin is below the seat contact, not the camera/player or splat root.
-const ronda: GuidePlacement = { origin: [-2.2, 0.25, -3.55], yaw: -90, seatHeight: 0.77 };
+const ronda: GuidePlacement = { origin: [-2.2, 0.25, -3.55], yaw: -90, seatHeight: 0.77, shadowGroundY: 0.42 };
 export function guidePlacement(sceneId: string, synthetic: boolean): GuidePlacement | undefined {
   if (synthetic) return fixture;
   return sceneId === 'ronda' || sceneId === 'ronda-full' ? ronda : undefined;

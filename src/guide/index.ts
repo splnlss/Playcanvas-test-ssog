@@ -33,7 +33,7 @@ export function createGuide(viewer: Viewer, fixture: boolean, sceneId: string) {
     if (!enabled) return;
     if (document.hidden || (viewer.xr.active && viewer.xr.visibilityState !== 'visible')) sequence.pause();
     sequence.update(dt);
-    presentation.render(sequence.pose, voice.snapshot.weights, captions ? voice.snapshot.caption : '');
+    presentation.render(sequence.pose, voice.snapshot.weights, captions ? voice.snapshot.caption : '', dt);
     const head = presentation.head.getPosition(), camera = viewer.player.camera;
     const p = camera.getPosition(), f = camera.forward, u = camera.up;
     voice.spatial([head.x, head.y, head.z], [p.x, p.y, p.z], [f.x, f.y, f.z], [u.x, u.y, u.z]);
@@ -43,7 +43,7 @@ export function createGuide(viewer: Viewer, fixture: boolean, sceneId: string) {
   return {
     actions, sequence, status, available: !!placement,
     get caption() { return captions ? voice.snapshot.caption : ''; },
-    setEnabled(value: boolean) { enabled = value && !!placement; presentation.root.enabled = enabled; },
+    setEnabled(value: boolean) { enabled = value && !!placement; presentation.setEnabled(enabled); },
     destroy() {
       viewer.app.off('update', update); stopVisibility();
       sequence.destroy(); presentation.destroy();

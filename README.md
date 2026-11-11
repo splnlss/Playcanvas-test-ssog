@@ -117,3 +117,7 @@ To verify WebGPU while immersed, press **left X**: the panel heading reads **VIE
 ### Supplied speech excerpt
 
 `public/guide/ronda-intro-30s.mp3` contains only source seconds 0–30, decoded/re-encoded as mono 24 kHz MP3 (30.000 seconds, about 298 kB). `src/guide/ronda-speech.json` supplies 10 caption intervals and 152 offline mouth cues tied to that exact audio SHA-256. See [audio provenance](public/guide/README.md) for the source, preparation, transcript status and mouth mapping. The full remote recording is not loaded during guide playback.
+
+### Prototype sunlight and shadow
+
+The guide has warm directional lighting from the upper-left of the authored opening view. A soft silhouette follows its animated body and projects down-right onto the provisional floor; the light stays fixed in the world as the viewer moves. The 256 px shadow mask updates at up to 30 Hz and fades/disposes with the guide. This is a planar prototype shadow, not a shadow map conforming to the scanned pipe, wall or grass. A validated receiver mesh is still needed for those surfaces.

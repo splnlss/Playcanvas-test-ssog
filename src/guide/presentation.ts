@@ -1,4 +1,5 @@
 import { BLEND_NORMAL, Color, Entity, StandardMaterial, Texture, type Application } from 'playcanvas';
+import { createGuideShadow } from './shadow';
 import type { GuidePose } from './sequence';
 import { worldGuidePose, type GuidePlacement } from './placement';
 
@@ -6,14 +7,15 @@ import { worldGuidePose, type GuidePlacement } from './placement';
 export function createGuidePresentation(app: Application, fixture: boolean, placement: GuidePlacement) {
   const root = new Entity('guide-prototype'); app.root.addChild(root);
   const materials: StandardMaterial[] = [];
-  const material = (r: number, g: number, b: number) => {
-    const m = new StandardMaterial(); m.useLighting = false; m.emissive = new Color(r, g, b);
+  const bodyParts: Entity[] = [];
+  const material = (r: number, g: number, b: number, lit = false) => {
+    const m = new StandardMaterial(); m.useLighting = lit; m.diffuse = new Color(r, g, b); m.emissive = new Color(r * (lit ? 0.5 : 1), g * (lit ? 0.5 : 1), b * (lit ? 0.5 : 1));
     m.blendType = BLEND_NORMAL; m.update(); materials.push(m); return m;
   };
-  const suit = material(0.13, 0.55, 0.6), skin = material(0.85, 0.66, 0.48), dark = material(0.025, 0.05, 0.07);
+  const suit = material(0.13, 0.55, 0.6, true), skin = material(0.85, 0.66, 0.48, true), dark = material(0.025, 0.05, 0.07, true);
   const part = (parent: Entity, name: string, type: 'box' | 'sphere' | 'cylinder' | 'plane', size: number[], position: number[], mat: StandardMaterial) => {
     const e = new Entity(name); e.addComponent('render', { type, material: mat });
-    e.setLocalScale(size[0], size[1], size[2]); e.setLocalPosition(position[0], position[1], position[2]); parent.addChild(e); return e;
+    e.setLocalScale(size[0], size[1], size[2]); e.setLocalPosition(position[0], position[1], position[2]); parent.addChild(e); bodyParts.push(e); return e;
   };
   const joint = (parent: Entity, name: string, x: number, y: number, z = 0) => {
     const e = new Entity(name); parent.addChild(e); e.setLocalPosition(x, y, z); return e;
@@ -39,6 +41,7 @@ export function createGuidePresentation(app: Application, fixture: boolean, plac
     part(arm, 'hand', 'sphere', [0.11, 0.14, 0.11], [0, -0.52, 0], skin);
     return arm;
   });
+  const shadow = createGuideShadow(app, bodyParts, placement);
   const fixtureRoot = new Entity('guide-fixture'); app.root.addChild(fixtureRoot);
   // Diagnostic geometry exists only in the explicitly selected fixture mode.
   if (fixture) {
@@ -55,7 +58,8 @@ export function createGuidePresentation(app: Application, fixture: boolean, plac
   let text = '';
   return {
     root, head,
-    render(pose: GuidePose, weights: Record<string, number>, captionText: string) {
+    setEnabled(value: boolean) { root.enabled = value; shadow.setEnabled(value); },
+    render(pose: GuidePose, weights: Record<string, number>, captionText: string, dt: number) {
       const b = pose.seated * pose.seated * (3 - 2 * pose.seated);
       const world = worldGuidePose(pose, placement);
       root.setPosition(...world.position); root.setEulerAngles(0, world.yaw, 0);
@@ -69,12 +73,13 @@ export function createGuidePresentation(app: Application, fixture: boolean, plac
       const a = weights.A ?? 0, e = weights.E ?? 0, o = weights.O ?? 0, m = weights.M ?? 0;
       mouth.setLocalScale(0.085 + e * 0.045 - o * 0.04, 0.012 + a * 0.065 + o * 0.05 - m * 0.008, 0.018);
       for (const mat of [suit, skin, dark, captionMat]) { mat.opacity = pose.opacity; mat.update(); }
+      shadow.render(dt, pose.opacity);
       caption.enabled = !!captionText;
       if (captionText !== text) {
         text = captionText; ctx.fillStyle = '#102028'; ctx.fillRect(0, 0, 1024, 128);
         ctx.fillStyle = '#fff'; ctx.font = '30px sans-serif'; ctx.textAlign = 'center'; ctx.fillText(text, 512, 76, 980); texture.setSource(captionImage);
       }
     },
-    destroy() { root.destroy(); fixtureRoot.destroy(); texture.destroy(); materials.forEach(m => m.destroy()); },
+    destroy() { shadow.destroy(); root.destroy(); fixtureRoot.destroy(); texture.destroy(); materials.forEach(m => m.destroy()); },
   };
 }

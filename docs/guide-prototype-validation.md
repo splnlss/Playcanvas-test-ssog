@@ -49,3 +49,13 @@ Generated 10 automatic caption intervals locally with MLX Whisper and 152 offlin
 New regressions failed before configuration, then passed: matching the bundled bytes to the cue revision and retaining the seated speech checkpoint until media completion, followed by standing/one-shot completion. Full suite: 64 tests passed in 16 files; TypeScript/production build passed with the existing engine-bundle warning.
 
 In a new browser fixture pane, a trusted Start click resumed Web Audio (`AudioContext.state = running`). Actual HTML media reported duration 30, currentTime 0 and paused=false at start. At the end it reported currentTime=30, ended=true, paused=true, and the guide reported `completed · done`. Temporary native application ticks were used where the embedded pane withheld frame callbacks; the audio clock itself was not simulated. Final captions/facial weights were neutral. This verifies decode/playback/end sequencing, not human-reviewed caption accuracy, heard positional balance or Quest acceptance.
+
+## Upper-left sunlight prototype
+
+Added an owned warm directional light with ray direction `[0.7,-1,0.5]` in the guide's authored frame, rotated into world space by its scene placement. Only mannequin materials are relit; no global ambient or splat lighting settings are changed. Modest emissive fill preserves facial readability.
+
+The ground shadow uses projected bounds of the articulated body parts, rasterized as one union mask and softened once on a 256×256 canvas. It uses actual current world transforms, follows walking/seating, respects guide fade/visibility, and releases its material/texture/entities on teardown. Mask uploads are capped at 30 Hz. It does not add a shadow-map pass or claim to receive shadows on the curved scanned pipe/wall/grass. Ronda uses a separate provisional shadow receiver at Y=0.42 (plus a 0.015 m surface bias) so grass above the original locomotion floor does not hide it; the avatar seat and route remain unchanged. The fixture uses its flat ground.
+
+Projection regressions cover down-right direction in the opening view, rotation into Ronda world space, exact receiver contact, and points below the provisional ground. 68 tests and the production build pass, with the existing engine-bundle warning. Fixture inspection from an elevated viewpoint visibly confirmed the softened down-right silhouette and directional head/hand shading. Browser rendering inspection used manual application ticks when the embedded pane withheld frame callbacks; no Quest shadow performance measurement is claimed.
+
+Independent read-only review found no Important shadow issues; it checked UV orientation, current articulated transforms, fixed light/projection direction, and resource teardown.
