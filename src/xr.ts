@@ -3,10 +3,10 @@ import type { SceneConfig } from './config';
 import type { DesktopControls, DesktopSnapshot } from './desktop';
 import type { QualityControls } from './quality';
 import type { Viewer } from './viewer';
-import { createVrMenu } from './vr-menu';
+import { createVrMenu, type MenuAction } from './vr-menu';
 import { createXrLifecycle, vrMotion } from './xr-state';
 
-export function createXr(viewer: Viewer, desktop: DesktopControls, quality: QualityControls, scene: SceneConfig) {
+export function createXr(viewer: Viewer, desktop: DesktopControls, quality: QualityControls, scene: SceneConfig, guideActions: MenuAction[] = [], guideReadout = () => '') {
   const { app, xr, player } = viewer;
   let ending = false, localFallback = false, armed = false, disposed = false;
   const lifecycle = createXrLifecycle<DesktopSnapshot>(snapshot => {
@@ -33,7 +33,8 @@ export function createXr(viewer: Viewer, desktop: DesktopControls, quality: Qual
       run: () => quality.select(preset),
     })) : []),
     ...(streamed ? [{ label: () => `Auto quality: ${quality.state.auto ? 'ON' : 'OFF'}`, run: () => quality.setAuto(!quality.state.auto) }] : []),
-  ], () => `${Math.round(quality.state.fps)} app FPS · ${streamed ? quality.state.preset.toUpperCase() : 'Single SOG / no LOD'} · ${xr.frameRate ?? 72} target Hz${xr.frameRate ? '' : ' (fallback)'}`);
+    ...guideActions,
+  ], () => `${Math.round(quality.state.fps)} app FPS · ${streamed ? quality.state.preset.toUpperCase() : 'Single SOG / no LOD'} · ${xr.frameRate ?? 72} target Hz${xr.frameRate ? '' : ' (fallback)'}`, guideReadout);
   const onStart = () => {
     if (disposed) return;
     lifecycle.activate(); positionForVr(); quality.onEnter(); menu.hide();

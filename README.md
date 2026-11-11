@@ -63,4 +63,30 @@ The streamed derivative removes spherical harmonics and adds decimated LODs and 
 
 ## Remaining acceptance
 
-Verify the updated controls in the headset, compare all three budgets on the same path, and test repeated entry/exit and a ten-minute session. A static HTTPS deployment and target Quest 3 performance test remain pending. [Walking collisions and future avatars](docs/walking-and-avatars.md) are planned separately. No collision solver, avatar implementation, or multiplayer is present.
+Verify the updated controls in the headset, compare all three budgets on the same path, and test repeated entry/exit and a ten-minute session. A static HTTPS deployment and target Quest 3 performance test remain pending. [Walking collisions and future avatars](docs/walking-and-avatars.md) are planned separately. No collision solver, production avatar GLB integration, or multiplayer is present. The procedural guide preview below is an initial implementation increment.
+
+## Guide pose prototype
+
+Open `http://localhost:5173/?guide=fixture` for synthetic ground and a pipe without downloading a splat scene. If 5173 is occupied, run `npm run dev -- --port 5180` and open `http://localhost:5180/?guide=fixture`. The normal Ronda page also exposes the guide preview, using the same provisional world coordinates.
+
+Press **Start guide preview**. A temporary articulated mannequin enters from 4 m to the right of the approach centerline, walks to the pipe, turns toward the viewer and sits. It stops seated with an actionable message because the final recording/captions/mouth cues have not been supplied. There is no synthetic speech substituted. Start is one-shot; use Restart to return to the initial pose with a guide-only fade. Pause/Resume and Stop preserve stable poses; Retry retries the current failed checkpoint. Camera reset does not restart the guide; Reload scene recreates it without auto-starting.
+
+Desktop controls include sound, volume, and captions. The same commands are available in the XR menu through **More controls** pages, with an in-world status area and guide captions. Hiding the page or losing XR visibility pauses the sequence; resumption is explicit. Headset interaction and positional audio still need device verification.
+
+Edit `src/guide/config.ts` for the provisional route and optional `guideSpeech` package. Positions are meters, Y-up, pipe along X, +Z toward the opening viewer, +X to their right. The route is fixed in the world and never follows the camera. The synthetic pipe top is 0.6 m. Align all of these guesses to the real scan before relying on them. Prototype movement assumes flat, clear ground; it does not prevent collisions in a scanned scene.
+
+A speech package has the following shape (files must be supplied):
+
+```ts
+{
+  audioUrl: '/guide/voice.wav',
+  audioRevision: 'final-recording-v1',
+  cueAudioRevision: 'final-recording-v1',
+  captions: [{ start: 0, end: 2, text: 'Checked transcript text' }],
+  cues: [{ start: 0.2, end: 0.5, viseme: 'A', weight: 0.8 }]
+}
+```
+
+Prepare cues offline from that exact recording. The prototype vocabulary is `neutral`, `A`, `E`, `O`, and `M`; timings are non-overlapping intervals in media seconds, with gaps allowed for silence. Audio and cue revisions must match, weights are 0–1, and timings must fit the loaded audio duration. This is a provisional vocabulary requiring validation against the selected production rig and cue generator. The adapter samples actual audio time for captions and facial weights, supports externally controlled seek/rate changes, and uses Web Audio positional routing attached to the guide head with the listener following the active camera. Muting preserves timing. The mannequin mouth is only a diagnostic visualization.
+
+Blender and Theatre.js are recorded as future authoring candidates in the [guide design](docs/superpowers/specs/2026-11-11-avatar-guide-design.md). This preview does not complete Phase 1: licensed replaceable speech-capable GLBs, real collision/seat validation, final audio/cues, occlusion checks, and Quest performance acceptance remain open.
