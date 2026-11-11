@@ -68,13 +68,13 @@ Verify the updated controls in the headset, compare all three budgets on the sam
 
 ## Guide pose prototype
 
-Open `http://localhost:5173/?guide=fixture` for synthetic ground and a pipe without downloading a splat scene. If 5173 is occupied, run `npm run dev -- --port 5180` and open `http://localhost:5180/?guide=fixture`. The normal Ronda page also exposes the guide preview, using the same provisional world coordinates.
+Open `http://localhost:5173/?guide=fixture` for synthetic ground and a pipe without downloading a splat scene. If 5173 is occupied, run `npm run dev -- --port 5180` and open `http://localhost:5180/?guide=fixture`. The normal Ronda page places the guide on the pipe in the saved default view. Ronda and ronda-full share the same authored placement; other scenes have no guide route until one is configured.
 
 Press **Start guide preview**. A temporary articulated mannequin enters from 4 m to the right of the approach centerline, walks to the pipe, turns toward the viewer and sits. It stops seated with an actionable message because the final recording/captions/mouth cues have not been supplied. There is no synthetic speech substituted. Start is one-shot; use Restart to return to the initial pose with a guide-only fade. Pause/Resume and Stop preserve stable poses; Retry retries the current failed checkpoint. Camera reset does not restart the guide; Reload scene recreates it without auto-starting.
 
 Desktop controls include sound, volume, and captions. The same commands are available in the XR menu through **More controls** pages, with an in-world status area and guide captions. Hiding the page or losing XR visibility pauses the sequence; resumption is explicit. Headset interaction and positional audio still need device verification.
 
-Edit `src/guide/config.ts` for the provisional route and optional `guideSpeech` package. Positions are meters, Y-up, pipe along X, +Z toward the opening viewer, +X to their right. The route is fixed in the world and never follows the camera. The synthetic pipe top is 0.6 m. Align all of these guesses to the real scan before relying on them. Prototype movement assumes flat, clear ground; it does not prevent collisions in a scanned scene.
+Edit `src/guide/config.ts` for the local prototype route and optional `guideSpeech` package, and `src/guide/placement.ts` for scene-specific world anchors. Route coordinates are meters, Y-up, with the local pipe along X, +Z toward the opening viewer, and +X to their right. Ronda maps that frame to origin `[-2.2, 0.25, -3.55]`, yaw `-90°`, and seat height `0.77 m` above the provisional floor. Its seated pelvis bottom therefore contacts world `[-2.2, 1.02, -3.55]`. These anchors were checked visually against the scan using native depth picks. The synthetic fixture retains its separate 0.6 m pipe and opening camera. The route is fixed in the world and never follows subsequent camera movement. Ground height and route clearance remain provisional. Prototype movement assumes flat, clear ground; it does not prevent collisions in a scanned scene.
 
 A speech package has the following shape (files must be supplied):
 

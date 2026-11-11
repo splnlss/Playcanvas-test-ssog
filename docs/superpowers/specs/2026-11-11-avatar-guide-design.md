@@ -133,3 +133,9 @@ Record avatar-off/on measurements over the same route after streaming settles: d
 - Access to Quest 3 for collision, positional audio, rendering, and performance acceptance.
 
 These are explicit integration/content inputs, not completed selections. Engine feasibility and device performance remain unverified.
+
+## Ronda placement applied after viewer import
+
+The latest viewer (`7c06077`) supplies the user's saved Ronda opening camera. The runtime now maps the provisional local route to a scene-specific frame in `src/guide/placement.ts`: origin `[-2.2, 0.25, -3.55]`, yaw `-90°`, seat height `0.77 m`. The resulting seat contact is world `[-2.2, 1.02, -3.55]`. Initial entry is world `[-3.7, 0.25, 0.45]`, 4 m to the right of the approach centerline. The synthetic fixture remains at its original origin and camera; these scan-specific values do not replace its geometry.
+
+Native depth picks and default/angled screenshots verify visual seat alignment in the scan. This does not establish collision, floor calibration, route clearance or Quest performance. See [alignment evidence](../../guide-prototype-validation.md#ronda-pipe-alignment-after-importing-the-new-default-view).

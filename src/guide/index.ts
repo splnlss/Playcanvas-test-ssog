@@ -1,15 +1,17 @@
 import type { Viewer } from '../viewer';
 import type { MenuAction } from '../vr-menu';
+import { guidePlacement } from './placement';
 import { guideSpeech } from './config';
 import { createGuideSequence } from './sequence';
 import { createGuideSpeech } from './speech';
 import { observeGuideVisibility } from './visibility';
 import { createGuidePresentation } from './presentation';
 
-export function createGuide(viewer: Viewer, fixture: boolean) {
+export function createGuide(viewer: Viewer, fixture: boolean, sceneId: string) {
   const voice = createGuideSpeech(guideSpeech);
   const sequence = createGuideSequence(voice);
-  const presentation = createGuidePresentation(viewer.app, fixture);
+  const placement = guidePlacement(sceneId, fixture);
+  const presentation = createGuidePresentation(viewer.app, fixture, placement ?? guidePlacement('', true)!);
   let enabled = false, muted = false, captions = true, volume = 1, notice = '';
   const gesture = (action: () => void) => {
     if (!enabled) return;
@@ -26,7 +28,7 @@ export function createGuide(viewer: Viewer, fixture: boolean) {
     { label: () => `Guide volume: ${Math.round(volume * 100)}%`, run: () => { volume = volume <= 0.01 ? 1 : Math.max(0, volume - 0.25); voice.setVolume(volume); } },
     { label: () => `Guide captions: ${captions ? 'on' : 'off'}`, run: () => { captions = !captions; } },
   ];
-  const status = () => !enabled ? 'Guide waiting for scene' : `${sequence.state} · ${sequence.checkpoint}${sequence.error ? ` · ${sequence.error}` : voice.snapshot.status === 'waiting' ? ' · Enable audio to continue' : notice ? ` · ${notice}` : ''}`;
+  const status = () => !placement ? 'No guide route authored for this scene.' : !enabled ? 'Guide waiting for scene' : `${sequence.state} · ${sequence.checkpoint}${sequence.error ? ` · ${sequence.error}` : voice.snapshot.status === 'waiting' ? ' · Enable audio to continue' : notice ? ` · ${notice}` : ''}`;
   const update = (dt: number) => {
     if (!enabled) return;
     if (document.hidden || (viewer.xr.active && viewer.xr.visibilityState !== 'visible')) sequence.pause();
@@ -39,9 +41,9 @@ export function createGuide(viewer: Viewer, fixture: boolean) {
   const stopVisibility = observeGuideVisibility(viewer.xr, document, () => sequence.pause());
   viewer.app.on('update', update);
   return {
-    actions, sequence, status,
+    actions, sequence, status, available: !!placement,
     get caption() { return captions ? voice.snapshot.caption : ''; },
-    setEnabled(value: boolean) { enabled = value; presentation.root.enabled = value; },
+    setEnabled(value: boolean) { enabled = value && !!placement; presentation.root.enabled = enabled; },
     destroy() {
       viewer.app.off('update', update); stopVisibility();
       sequence.destroy(); presentation.destroy();

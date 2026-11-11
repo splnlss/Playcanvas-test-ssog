@@ -1,8 +1,9 @@
 import { BLEND_NORMAL, Color, Entity, StandardMaterial, Texture, type Application } from 'playcanvas';
 import type { GuidePose } from './sequence';
+import { worldGuidePose, type GuidePlacement } from './placement';
 
 /** Owned procedural stand-in. This is not the licensed production GLB/rig. */
-export function createGuidePresentation(app: Application, fixture: boolean) {
+export function createGuidePresentation(app: Application, fixture: boolean, placement: GuidePlacement) {
   const root = new Entity('guide-prototype'); app.root.addChild(root);
   const materials: StandardMaterial[] = [];
   const material = (r: number, g: number, b: number) => {
@@ -56,8 +57,9 @@ export function createGuidePresentation(app: Application, fixture: boolean) {
     root, head,
     render(pose: GuidePose, weights: Record<string, number>, captionText: string) {
       const b = pose.seated * pose.seated * (3 - 2 * pose.seated);
-      root.setPosition(pose.position[0], pose.position[1], pose.position[2] - 0.6 * b); root.setEulerAngles(0, pose.yaw, 0);
-      hips.setLocalPosition(0, 1.02 - 0.28 * b, 0);
+      const world = worldGuidePose(pose, placement);
+      root.setPosition(...world.position); root.setEulerAngles(0, world.yaw, 0);
+      hips.setLocalPosition(0, world.hipHeight, 0);
       const swing = pose.moving ? Math.sin(pose.distance * 9) * 25 * (1 - b) : 0;
       legs.forEach(({ thigh, shin }, i) => {
         const step = swing * (i ? -1 : 1);

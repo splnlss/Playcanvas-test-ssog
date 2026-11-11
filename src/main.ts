@@ -20,8 +20,9 @@ const auto = element<HTMLInputElement>('auto');
 const reset = element<HTMLButtonElement>('reset');
 
 async function start() {
-  const scene = resolveScene(location.search);
   const fixture = new URLSearchParams(location.search).get('guide') === 'fixture';
+  const selected = resolveScene(location.search);
+  const scene = fixture ? { ...selected, id: `${selected.id}-guide-fixture`, desktop: { position: [0, 1.6, 5] as [number, number, number], target: [0, 1.6, 0] as [number, number, number] }, vr: { position: [0, 0, 5] as [number, number, number], heading: 0, localEyeHeight: 1.6 } } : selected;
   element('title').textContent = fixture ? 'Guide route · pose prototype' : scene.title;
   element<HTMLAnchorElement>('credit').textContent = scene.attribution;
   element<HTMLAnchorElement>('credit').href = scene.creditUrl;
@@ -47,7 +48,7 @@ async function start() {
   let guide: Guide | undefined;
   const guideButtons = element('guide-buttons');
   const rebuildGuide = () => {
-    guide?.destroy(); guide = createGuide(viewer, fixture); guide.setEnabled(false);
+    guide?.destroy(); guide = createGuide(viewer, fixture, scene.id); guide.setEnabled(false);
     guideButtons.replaceChildren(...guide.actions.map(action => {
       const button = document.createElement('button'); button.textContent = action.label();
       button.addEventListener('click', () => { action.run(); refreshGuide(); }); return button;
@@ -57,7 +58,7 @@ async function start() {
     if (!guide) return;
     element('guide-status').textContent = guide.status();
     element('guide-caption').textContent = guide.caption;
-    [...guideButtons.children].forEach((button, i) => { (button as HTMLButtonElement).disabled = loading || viewer.loading.state !== 'ready'; button.textContent = guide!.actions[i].label(); });
+    [...guideButtons.children].forEach((button, i) => { (button as HTMLButtonElement).disabled = !guide!.available || loading || viewer.loading.state !== 'ready'; button.textContent = guide!.actions[i].label(); });
   };
   const vr = createXr(viewer,desktop,quality,scene,cameraCopy,
     Array.from({ length: 8 }, (_, i) => ({ label: () => guide?.actions[i].label() ?? 'Guide unavailable', run: () => guide?.actions[i].run() })),

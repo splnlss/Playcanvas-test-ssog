@@ -7,7 +7,6 @@ export const prototypeGuide = {
   route: [[2, 0, 1.5], [0, 0, 1.5], [0, 0, 0.6]] as Vec3Tuple[],
   speed: 0.8,
   turnSpeed: 120,
-  seatHeight: 0.6,
   transitionSeconds: 1.2,
 };
 

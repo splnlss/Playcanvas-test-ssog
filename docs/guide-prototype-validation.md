@@ -27,3 +27,15 @@ An independent fresh-context code review found three Important defects. Regressi
 - Actual positional audio/browser unlocking, final facial mappings, XR controls/captions on Quest, splat occlusion, and performance budgets.
 
 This is a runnable pose-prototype increment, not Phase 1 acceptance. No deployment or push was performed.
+
+## Ronda pipe alignment after importing the new default view
+
+Imported origin `7c06077` (Quest optimizations, WebGPU, camera bookmarks and the user-selected opening view), preserving the guide prototype through the merge. Prepared the 17 local SH0 metadata files with `npm run prepare:ronda`. Backend selection/labels, camera-copy controls, render scale and quality/foveation readouts remain available alongside paginated guide controls.
+
+The saved opening camera looks approximately along +X. Native PlayCanvas depth picks across the visible pipe top returned, for example, `[-2.2994, 0.9981, -3.5537]` and `[-2.3117, 1.0026, -3.4082]`. The authored seat contact is `[-2.2, 1.02, -3.55]`, with a provisional floor of Y=0.25 and guide frame yaw=-90 degrees. The local +X entry therefore maps to world +Z (the viewer's right). The seated pelvis center is Y=1.13; its 0.11 m half-height puts its bottom at Y=1.02. The rigid placement is independent of both the camera and the splat content transform.
+
+Inspected the mannequin seated on the actual scanned pipe from the saved default view and an angled inspection view. The latter confirms the bent thighs and seat contact rather than relying on the foreshortened frontal silhouette. [Default view](qa/screenshots/avatar-pipe-default.png) and [angled view](qa/screenshots/avatar-pipe-side.png) were captured with the HTML panel temporarily hidden for inspection. Reset restored the exact saved camera without restarting the guide. This static placement evidence used manually advanced application updates when the embedded pane withheld frame callbacks; it is not a real-time animation or hardware acceptance claim.
+
+Scene placement lives in `src/guide/placement.ts`; `ronda` and `ronda-full` share it. The synthetic fixture retains its separate original camera/seat and uses a separate camera-bookmark scene ID. Unauthored scenes do not enable the guide. Ground/route clearance and production collision remain unverified. The missing audio package still leaves the sequence seated at the speech checkpoint.
+
+Regression tests cover the actual pelvis contact height, route rotation/start, shared Ronda placement, unsupported-scene gating, and the unchanged fixture seat. Full suite: 62 tests passed in 15 files; TypeScript/production build passed with the existing engine-bundle size warning. Independent review found no Important or Critical alignment/merge regressions; its fixture bookmark overlap was corrected by isolating the fixture ID.
