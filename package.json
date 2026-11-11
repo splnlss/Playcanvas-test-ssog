@@ -1,0 +1,22 @@
+{
+  "name": "streaming-sog-viewer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173 --strictPort",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "preview": "vite preview --host 0.0.0.0 --port 5173 --strictPort",
+    "prepare:sample": "node scripts/prepare-sample.mjs"
+  },
+  "dependencies": {
+    "playcanvas": "2.24.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  }
+}

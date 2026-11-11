@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Streaming SOG viewer</title></head>
+<body>
+  <canvas id="viewer" aria-label="Gaussian splat scene" tabindex="0"></canvas>
+  <main>
+    <p class="eyebrow">PLAYCANVAS / SOG VIEWER</p>
+    <h1 id="title">Streaming SOG viewer</h1>
+    <p id="status" role="status">Starting WebGL2…</p>
+    <div class="toolbar">
+      <button id="enter" disabled>Enter VR</button>
+      <label>Controls <select id="mode" disabled><option value="orbit">Orbit</option><option value="fly">Fly</option></select></label>
+      <button id="reset" disabled>Reset view</button>
+      <button id="retry">Reload scene</button>
+    </div>
+    <div class="toolbar quality">
+      <label>VR quality <select id="quality" disabled><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></label>
+      <label><input id="auto" type="checkbox" disabled> Auto quality in VR</label>
+    </div>
+    <p id="metrics">Waiting for first content</p>
+    <details><summary>Controls &amp; scene info</summary>
+      <p><strong>Orbit:</strong> left drag to rotate, right drag to pan, wheel to zoom.</p>
+      <p><strong>Fly:</strong> select Fly, then click the scene. Mouse looks; WASD moves; Q/E moves down/up. Shift boosts speed. Escape releases the mouse.</p>
+      <p><strong>VR:</strong> left stick flies horizontally; right stick moves up/down or snap-turns. Left X opens/closes the menu and pauses flight. Point the right controller at a button and press its trigger. Menu includes Reset, Exit, and quality/FPS controls.</p>
+      <p>Flight passes through geometry. Walking collision and avatars are planned separately. VR quality chooses the next headset preset; desktop uses its configured budget. This viewer renders on the device opening the page.</p>
+      <p>Replace models through <code>src/config.ts</code>. Supplied links: <a href="?scene=sample">streamed sample</a> · <a href="?scene=single">single SOG</a>.</p>
+    </details>
+  </main>
+  <footer><a id="credit" target="_blank" rel="noopener"></a> · <a id="license" target="_blank" rel="noopener">CC BY 4.0</a></footer>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
