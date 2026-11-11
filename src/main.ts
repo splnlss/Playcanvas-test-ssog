@@ -22,6 +22,7 @@ async function start() {
   element<HTMLAnchorElement>('credit').textContent = scene.attribution;
   element<HTMLAnchorElement>('credit').href = scene.creditUrl;
   element<HTMLAnchorElement>('license').href = scene.licenseUrl;
+  element('license').textContent = scene.licenseLabel ?? 'License';
   const viewer = await createViewer(element<HTMLCanvasElement>('viewer'));
   const { app, xr } = viewer;
   const desktop = createDesktop(viewer,scene);

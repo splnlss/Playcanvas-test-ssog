@@ -6,6 +6,13 @@ describe('configured scene selection', () => {
     expect(resolveScene('').source.kind).toBe('streamed-sog');
     expect(resolveScene('?scene=single').source.kind).toBe('sog');
   });
+  it('defaults to remote Ronda and keeps the apartment available explicitly', () => {
+    const scene = resolveScene('?scene=ronda');
+    expect(scene.source).toEqual({ kind: 'streamed-sog', manifestUrl: 'https://pub-dd92ae5131ec49f1bbd411b51a858249.r2.dev/01_SLV_RondaJoseph/20260820_RondaLobato/web/lod/lod-meta.json' });
+    expect(scene.licenseLabel).toBe('Source');
+    expect(resolveScene('').id).toBe('ronda');
+    expect(resolveScene('?scene=sample').id).toBe('sample');
+  });
   it('rejects unknown IDs including inherited object keys', () => {
     expect(() => resolveScene('?scene=toString')).toThrow('Unknown scene');
   });

@@ -9,6 +9,7 @@ export type SceneConfig = {
   attribution: string;
   creditUrl: string;
   licenseUrl: string;
+  licenseLabel?: string;
   transform: Pose & { scale: number };
   desktop: { position: Vec3Tuple; target: Vec3Tuple };
   vr: { position: Vec3Tuple; heading: number; localEyeHeight: number };
@@ -25,6 +26,7 @@ const apartment: Omit<SceneConfig, 'id' | 'title' | 'source'> = {
   attribution: 'SA3D_R&D_XP47 — Stephane Agullo (sa3d.fr), CC BY 4.0. Streamed sample: decimated/repacked; SH removed.',
   creditUrl: 'https://superspl.at/view?id=cdcec084',
   licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
+  licenseLabel: 'CC BY 4.0',
   transform: { position: [0, 0, 0], rotation: [1, 0, 0, 0], scale: 1 },
   desktop: { position: [-3.8, -0.1, 7.2], target: [0, -0.1, 0] },
   vr: { position: [-3.8, -1.7, 7.2], heading: -28, localEyeHeight: 1.6 },
@@ -33,15 +35,27 @@ const apartment: Omit<SceneConfig, 'id' | 'title' | 'source'> = {
   vrProfiles: { low: { splatBudget: 250_000 }, medium: { splatBudget: 500_000 }, high: { splatBudget: 1_000_000 } },
 };
 
-export const defaultSceneId = 'sample';
+export const defaultSceneId = 'ronda';
 export const scenes: Record<string, SceneConfig> = {
   sample: { ...apartment, id: 'sample', title: 'Apartment · streamed', source: { kind: 'streamed-sog', manifestUrl: '/sample/streamed/lod-meta.json' } },
+  ronda: {
+    ...apartment, id: 'ronda', title: 'Ronda Lobato · streamed',
+    source: { kind: 'streamed-sog', manifestUrl: 'https://pub-dd92ae5131ec49f1bbd411b51a858249.r2.dev/01_SLV_RondaJoseph/20260820_RondaLobato/web/lod/lod-meta.json' },
+    attribution: 'Ronda Lobato — user-provided scene; creator and license not supplied.',
+    creditUrl: 'https://pub-dd92ae5131ec49f1bbd411b51a858249.r2.dev/01_SLV_RondaJoseph/20260820_RondaLobato/web/lod/lod-meta.json',
+    licenseUrl: 'https://pub-dd92ae5131ec49f1bbd411b51a858249.r2.dev/01_SLV_RondaJoseph/20260820_RondaLobato/web/lod/lod-meta.json',
+    licenseLabel: 'Source',
+    // Provisional world-space spawn; adjust here after checking the capture's floor/orientation.
+    transform: { position: [0, 0, 0], rotation: [1, 0, 0, 0], scale: 1 },
+    desktop: { position: [0, 1.6, 5], target: [0, 1.6, 0] },
+    vr: { position: [0, 0, 5], heading: 0, localEyeHeight: 1.6 },
+  },
   single: { ...apartment, id: 'single', title: 'Apartment · single SOG', source: { kind: 'sog', url: '/sample/apartment.sog' } },
 };
 
 export function resolveScene(search: string): SceneConfig {
   const id = new URLSearchParams(search).get('scene') ?? defaultSceneId;
-  if (!Object.hasOwn(scenes, id)) throw new Error(`Unknown scene: ${id}. Use ?scene=sample or ?scene=single.`);
+  if (!Object.hasOwn(scenes, id)) throw new Error(`Unknown scene: ${id}. Available scenes: ${Object.keys(scenes).join(', ')}.`);
   return validateScene(scenes[id]);
 }
 
