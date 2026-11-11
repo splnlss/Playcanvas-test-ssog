@@ -2,7 +2,7 @@ import { BLEND_NORMAL, Color, CULLFACE_NONE, Entity, Layer, StandardMaterial, Te
 import { panelRow, menuPage, wrapMenuText } from './menu-hit';
 import type { Viewer } from './viewer';
 
-export type MenuAction = { label: () => string; run: () => void };
+export type MenuAction = { label: () => string; run: () => void; enabled?: () => boolean };
 export function createVrMenu(viewer: Viewer, actions: MenuAction[], readout: () => string, guideStatus = () => '') {
   const { app, xr, player } = viewer;
   const camera = player.camera;
@@ -41,8 +41,9 @@ export function createVrMenu(viewer: Viewer, actions: MenuAction[], readout: () 
     ctx.font = '22px sans-serif';
     wrapMenuText(guideStatus()).forEach((line, i) => ctx.fillText(line,32,174+i*24));
     visibleActions().forEach((action, i) => {
-      ctx.fillStyle = hovered === i ? '#347764' : '#243e45'; ctx.fillRect(24,300 + i*100,720,84);
-      ctx.fillStyle = '#fff'; ctx.font = '28px sans-serif'; ctx.fillText(action.label(),44,352+i*100);
+      const enabled = action.enabled?.() !== false;
+      ctx.fillStyle = !enabled ? '#182b30' : hovered === i ? '#347764' : '#243e45'; ctx.fillRect(24,300 + i*100,720,84);
+      ctx.fillStyle = enabled ? '#fff' : '#81938d'; ctx.font = '28px sans-serif'; ctx.fillText(action.label(),44,352+i*100);
     });
     texture.setSource(image);
   };
@@ -79,7 +80,8 @@ export function createVrMenu(viewer: Viewer, actions: MenuAction[], readout: () 
   };
   const select = (source: XrInputSource) => {
     if (!root.enabled || fade || source.handedness !== 'right') return;
-    const index = hit(source); if (index >= 0) { visibleActions()[index].run(); draw(); }
+    const index = hit(source);
+    if (index >= 0) { const action = visibleActions()[index]; if (action.enabled?.() !== false) action.run(); draw(); }
   };
   app.on('update',update); xr.input.on('selectstart',select);
   return {

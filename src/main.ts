@@ -58,10 +58,10 @@ async function start() {
     if (!guide) return;
     element('guide-status').textContent = guide.status();
     element('guide-caption').textContent = guide.caption;
-    [...guideButtons.children].forEach((button, i) => { (button as HTMLButtonElement).disabled = !guide!.available || loading || viewer.loading.state !== 'ready'; button.textContent = guide!.actions[i].label(); });
+    [...guideButtons.children].forEach((button, i) => { (button as HTMLButtonElement).disabled = !guide!.available || guide!.actions[i].enabled?.() === false || loading || viewer.loading.state !== 'ready'; button.textContent = guide!.actions[i].label(); });
   };
   const vr = createXr(viewer,desktop,quality,scene,cameraCopy,
-    Array.from({ length: 8 }, (_, i) => ({ label: () => guide?.actions[i].label() ?? 'Guide unavailable', run: () => guide?.actions[i].run() })),
+    Array.from({ length: 8 }, (_, i) => ({ label: () => guide?.actions[i].label() ?? 'Guide unavailable', run: () => guide?.actions[i].run(), enabled: () => !!guide?.available && guide.actions[i].enabled?.() !== false })),
     () => guide?.status() ?? '');
   let loading = false;
   const refresh = () => {

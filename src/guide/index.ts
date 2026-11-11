@@ -1,5 +1,6 @@
 import type { Viewer } from '../viewer';
 import type { MenuAction } from '../vr-menu';
+import { createPrimaryGuideAction } from './controls';
 import { guidePlacement } from './placement';
 import { guideSpeech } from './config';
 import { createGuideSequence } from './sequence';
@@ -18,8 +19,9 @@ export function createGuide(viewer: Viewer, fixture: boolean, sceneId: string) {
     void voice.unlock().catch(error => { notice = `Enable audio: ${error instanceof Error ? error.message : error}`; });
     action();
   };
+  const primary = createPrimaryGuideAction(sequence);
   const actions: MenuAction[] = [
-    { label: () => 'Start guide preview', run: () => gesture(() => sequence.start()) },
+    { ...primary, run: () => gesture(primary.run) },
     { label: () => sequence.state === 'paused' ? 'Resume guide' : 'Pause guide', run: () => gesture(() => sequence.state === 'paused' ? sequence.resume() : sequence.pause()) },
     { label: () => 'Stop guide', run: () => sequence.stop() },
     { label: () => 'Restart guide preview', run: () => gesture(() => sequence.restart()) },

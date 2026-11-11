@@ -1,4 +1,5 @@
 import { expect, it } from 'vitest';
+import { createPrimaryGuideAction } from '../src/guide/controls';
 import { createGuideSequence, type GuideSpeech } from '../src/guide/sequence';
 
 function speech(): GuideSpeech {
@@ -72,4 +73,14 @@ it('honors Stop during a Restart fade without starting another walk', () => {
   g.stop(); const position = [...g.pose.position];
   for (let i = 0; i < 30; i++) g.update(0.05);
   expect(g.state).toBe('stopped'); expect(g.pose.position).toEqual(position); expect(g.pose.opacity).toBe(1);
+});
+
+it('offers a working primary Restart after Stop and Resume after Pause', () => {
+  const g = createGuideSequence(speech()), primary = createPrimaryGuideAction(g);
+  primary.run(); g.update(0.05); g.stop();
+  expect(primary.label()).toContain('Restart'); expect(primary.enabled?.()).toBe(true);
+  primary.run(); until(g, () => g.state === 'running');
+  expect(primary.enabled?.()).toBe(false);
+  g.pause(); expect(primary.label()).toContain('Resume'); primary.run();
+  expect(g.state).toBe('running');
 });
