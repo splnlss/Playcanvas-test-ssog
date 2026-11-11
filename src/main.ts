@@ -24,7 +24,10 @@ const panelContent = element('panel-content');
 panelToggle.addEventListener('click', () => {
   panelContent.hidden = !panelContent.hidden;
   panelToggle.setAttribute('aria-expanded', String(!panelContent.hidden));
-  panelToggle.textContent = panelContent.hidden ? 'Settings' : 'Collapse';
+  panelToggle.textContent = panelContent.hidden ? '▾' : '▴';
+  const label = panelContent.hidden ? 'Open menu' : 'Close menu';
+  panelToggle.setAttribute('aria-label', label);
+  panelToggle.title = label;
 });
 
 async function start() {

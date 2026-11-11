@@ -14,7 +14,7 @@ main{max-width:380px;padding:18px}.toolbar button,.toolbar select{font-size:13px
 [hidden]{display:none!important}
 .panel-actions{flex-wrap:nowrap;gap:6px}
 .panel-actions button{padding:7px 9px}
-#panel-toggle{margin-left:auto;font-size:12px;padding:7px}
+#panel-toggle{margin-left:auto;font-size:20px;line-height:1;padding:7px 10px;min-width:36px}
 #start-guide{background:#32715d}
 main:has(#panel-content[hidden]){max-width:440px;width:fit-content;padding:12px}
 #guide-status{font-size:12px;margin:8px 0 0}
