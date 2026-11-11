@@ -1,12 +1,18 @@
-import { Application, Asset, CameraComponent, DEVICETYPE_WEBGL2, FILLMODE_FILL_WINDOW, RESOLUTION_AUTO, Entity, GSplatOctreeResource, Layer, createGraphicsDevice } from 'playcanvas';
+import { Application, Asset, CameraComponent, FILLMODE_FILL_WINDOW, RESOLUTION_AUTO, Entity, GSplatOctreeResource, Layer, createGraphicsDevice } from 'playcanvas';
 import type { QualityProfile, SceneConfig } from './config';
 import { createLoadState, createLoadDeadline } from './load-state';
 import { createSplatAssets } from './asset-store';
 import { observeXrEnd } from './xr-state';
+import { backendOptions } from './backend';
 import { createPlayer } from './player';
 
 export async function createViewer(canvas: HTMLCanvasElement) {
-  const device = await createGraphicsDevice(canvas, { deviceTypes: [DEVICETYPE_WEBGL2], antialias: false });
+  // Keep VR-capable devices on a compatible backend if the GPU/XR bridge is absent.
+  const xrSystem: { isSessionSupported(mode: 'immersive-vr'): Promise<boolean> } | undefined = Reflect.get(navigator, 'xr');
+  const immersiveVr = await xrSystem?.isSessionSupported('immersive-vr').catch(() => true) ?? false;
+  const backend = backendOptions(location.search, { webgpu: !!Reflect.get(navigator, 'gpu'), webgpuXr: typeof Reflect.get(globalThis, 'XRGPUBinding') === 'function', immersiveVr });
+  const device = await createGraphicsDevice(canvas, { deviceTypes: backend.deviceTypes, antialias: false });
+  const backendLabel = device.isWebGPU ? 'WebGPU' : 'WebGL2';
   device.maxPixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
   const app = new Application(canvas, { graphicsDevice: device });
   const xr = app.xr;
@@ -104,9 +110,12 @@ export async function createViewer(canvas: HTMLCanvasElement) {
     });
   };
   return {
-    app, xr, sceneRoot, player, loading, load, resize,
+    app, xr, sceneRoot, player, loading, load, resize, backend, backendLabel,
     reload: () => current ? load(current) : Promise.reject(new Error('No scene selected.')),
-    setQuality(profile: QualityProfile) { app.scene.gsplat.splatBudget = profile.splatBudget; },
+    setQuality(profile: QualityProfile) {
+      app.scene.gsplat.splatBudget = profile.splatBudget;
+      if (xr.active) xr.fixedFoveation = profile.fixedFoveation ?? 0;
+    },
     destroy() { stopEndObserver(); clear(); assets.destroy(); loading.cancel(); window.removeEventListener('resize', resize); player.destroy(); app.destroy(); },
   };
 }

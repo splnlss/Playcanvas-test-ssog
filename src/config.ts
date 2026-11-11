@@ -1,7 +1,7 @@
 import type { Pose, Vec3Tuple } from './movement';
 
 export type SplatSource = { kind: 'streamed-sog'; manifestUrl: string } | { kind: 'sog'; url: string };
-export type QualityProfile = { splatBudget: number };
+export type QualityProfile = { splatBudget: number; fixedFoveation?: number };
 export type SceneConfig = {
   id: string;
   title: string;
@@ -17,10 +17,13 @@ export type SceneConfig = {
   flightSpeed: number;
   boostSpeed: number;
   snapAngle: number;
+  vrRenderScale: number;
   desktopProfile: QualityProfile;
   vrProfiles: Record<'low' | 'medium' | 'high', QualityProfile>;
   walking?: { collisionMeshUrl: string; safeSpawn: Pose };
 };
+
+const rondaManifestUrl = 'https://pub-dd92ae5131ec49f1bbd411b51a858249.r2.dev/01_SLV_RondaJoseph/20260820_RondaLobato/web/lod/lod-meta.json';
 
 const apartment: Omit<SceneConfig, 'id' | 'title' | 'source'> = {
   attribution: 'SA3D_R&D_XP47 — Stephane Agullo (sa3d.fr), CC BY 4.0. Streamed sample: decimated/repacked; SH removed.',
@@ -31,8 +34,9 @@ const apartment: Omit<SceneConfig, 'id' | 'title' | 'source'> = {
   desktop: { position: [-3.8, -0.1, 7.2], target: [0, -0.1, 0] },
   vr: { position: [-3.8, -1.7, 7.2], heading: -28, localEyeHeight: 1.6 },
   orbitReentryDistance: 3, flightSpeed: 1.5, boostSpeed: 3, snapAngle: 30,
+  vrRenderScale: 0.7,
   desktopProfile: { splatBudget: 1_000_000 },
-  vrProfiles: { low: { splatBudget: 250_000 }, medium: { splatBudget: 500_000 }, high: { splatBudget: 1_000_000 } },
+  vrProfiles: { low: { splatBudget: 100_000, fixedFoveation: 0.8 }, medium: { splatBudget: 250_000, fixedFoveation: 0.5 }, high: { splatBudget: 500_000, fixedFoveation: 0.2 } },
 };
 
 export const defaultSceneId = 'ronda';
@@ -40,18 +44,21 @@ export const scenes: Record<string, SceneConfig> = {
   sample: { ...apartment, id: 'sample', title: 'Apartment · streamed', source: { kind: 'streamed-sog', manifestUrl: '/sample/streamed/lod-meta.json' } },
   ronda: {
     ...apartment, id: 'ronda', title: 'Ronda Lobato · streamed',
-    source: { kind: 'streamed-sog', manifestUrl: 'https://pub-dd92ae5131ec49f1bbd411b51a858249.r2.dev/01_SLV_RondaJoseph/20260820_RondaLobato/web/lod/lod-meta.json' },
+    source: { kind: 'streamed-sog', manifestUrl: '/ronda-sh0/lod-meta.json' },
     attribution: 'Ronda Lobato — user-provided scene; creator and license not supplied.',
-    creditUrl: 'https://pub-dd92ae5131ec49f1bbd411b51a858249.r2.dev/01_SLV_RondaJoseph/20260820_RondaLobato/web/lod/lod-meta.json',
-    licenseUrl: 'https://pub-dd92ae5131ec49f1bbd411b51a858249.r2.dev/01_SLV_RondaJoseph/20260820_RondaLobato/web/lod/lod-meta.json',
+    creditUrl: rondaManifestUrl,
+    licenseUrl: rondaManifestUrl,
     licenseLabel: 'Source',
-    // Provisional world-space spawn; adjust here after checking the capture's floor/orientation.
+    // User-selected camera bookmark; VR position is the feet-level rig origin.
     transform: { position: [0, 0, 0], rotation: [1, 0, 0, 0], scale: 1 },
-    desktop: { position: [0, 1.6, 5], target: [0, 1.6, 0] },
-    vr: { position: [0, 0, 5], heading: 0, localEyeHeight: 1.6 },
+    desktop: { position: [-4.966210842132568, 1.6858277320861816, -3.4595277309417725], target: [-2.0040750713565547, 1.2226874417196787, -3.5656066964741555] },
+    vr: { position: [-4.966210842132568, 0.08582773208618155, -3.4595277309417725], heading: -87.94902015045483, localEyeHeight: 1.6 },
   },
   single: { ...apartment, id: 'single', title: 'Apartment · single SOG', source: { kind: 'sog', url: '/sample/apartment.sog' } },
 };
+
+// Original hosted data and rendering settings retained for A/B comparison.
+scenes['ronda-full'] = { ...scenes.ronda, id: 'ronda-full', title: 'Ronda Lobato · original SH', source: { kind: 'streamed-sog', manifestUrl: rondaManifestUrl }, vrRenderScale: 1, vrProfiles: { low: { splatBudget: 250_000 }, medium: { splatBudget: 500_000 }, high: { splatBudget: 1_000_000 } } };
 
 export function resolveScene(search: string): SceneConfig {
   const id = new URLSearchParams(search).get('scene') ?? defaultSceneId;
@@ -71,6 +78,8 @@ export function validateScene(scene: SceneConfig): SceneConfig {
       scene.desktop.position.every((v, i) => v === scene.desktop.target[i])) throw new Error('Desktop position/target is invalid.');
   if (!vector(scene.vr.position, 3) || !Number.isFinite(scene.vr.heading) || !positive(scene.vr.localEyeHeight)) throw new Error('VR starting pose is invalid.');
   if (![scene.orbitReentryDistance, scene.flightSpeed, scene.boostSpeed, scene.snapAngle].every(positive)) throw new Error('Movement settings must be positive.');
+  if (!positive(scene.vrRenderScale) || scene.vrRenderScale > 1) throw new Error('VR render scale must be greater than 0 and at most 1.');
+  if ([scene.desktopProfile, ...Object.values(scene.vrProfiles)].some(p => p.fixedFoveation !== undefined && (!Number.isFinite(p.fixedFoveation) || p.fixedFoveation < 0 || p.fixedFoveation > 1))) throw new Error('Fixed foveation must be between 0 and 1.');
   const source = scene.source;
   if (source.kind !== 'streamed-sog' && source.kind !== 'sog') throw new Error('Unknown scene source kind.');
   const value = source.kind === 'streamed-sog' ? source.manifestUrl : source.url;

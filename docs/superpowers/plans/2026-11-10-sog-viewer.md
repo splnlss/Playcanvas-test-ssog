@@ -1,6 +1,6 @@
 # Streaming SOG Viewer Implementation Plan
 
-> **Active original track — 2026-11-11:** The user moved desktop-GPU-to-Quest research into a separate tab and asked to continue this original local-rendering viewer plan here. Resume at Task 1’s unpassed hardware gate; do not treat successful page loading as proof of immersive VR.
+> **Active original track — 2026-11-11:** The user moved desktop-GPU-to-Quest research into a separate tab and asked to continue this original local-rendering viewer plan here. Core implementation is present. Basic immersive entry was confirmed by the user on Quest 3S; complete headset acceptance and performance remain open. See [current browser QA](../../qa/2026-11-11-viewer-testing.md) and [validation](../../prototype-validation.md) for executed checks rather than treating the original step checklist below as a completion report.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. Recommend native execution for this small, sequential prototype.
 
@@ -20,7 +20,7 @@
 - Walking collision and avatars are planned follow-ups, not prototype implementations; no physics/avatar dependencies or placeholder frameworks now.
 - Flight: 1.5 m/s, desktop Shift boost to 3 m/s, Q/E vertical, no collisions.
 - VR: headset-yaw-relative horizontal flight, right-stick vertical movement and 30° snap turns; no artificial pitch/roll or VR boost.
-- Manual Low/Medium/High and FPS are required; Auto is optional and off on VR entry.
+- Manual Low/Medium/High and FPS are required; Auto is optional, initially off, and cleared on session exit. The user-approved checkbox correction allows an explicit pre-entry Auto selection to carry into the next session.
 - Preserve scene content during refinement; restore desktop mode, pose, target, and quality after VR.
 - Keep the reset fade and small controller-operated menu; do not add feature scope.
 - No hardware verification claim based on desktop emulation or documentation alone.
@@ -64,7 +64,7 @@ Use these application-owned interfaces; they are not claims about PlayCanvas API
 - `createViewer(canvas: HTMLCanvasElement): Promise<Viewer>`; `Viewer` owns `app`, `sceneRoot`, and `player: PlayerRig`, `load(scene): Promise<void>` (resolves at first content), `reload(): Promise<void>`, `setQuality(profile): void`, and `destroy(): void`. Loading a new descriptor disposes old scene assets and resets scene-specific poses/profiles; the player rig is independent of the scene transform. The composition module `main.ts`, which knows both modules, ends active XR before calling scene replacement; the loader never imports XR.
 - `LoadState = 'loading' | 'ready' | 'error'`; optional refinement notices never replace ready content with an initial spinner.
 - `createDesktop(viewer, scene): DesktopControls` exposes `snapshot()`, `restore(snapshot)`, `setEnabled(boolean)`, `reset()`, and `destroy()`.
-- `createQuality(apply: (profile: QualityProfile) => void, profiles): QualityControls` exposes `select(preset)`, `onEnter()`, `update(dtSeconds, targetFps)`, and read-only `{ preset, auto, fps }` state. `onEnter()` resets Auto off, retains last preset, and applies it.
+- `createQuality(apply: (profile: QualityProfile) => void, profiles): QualityControls` exposes `select(preset)`, `onEnter()`, `update(dtSeconds, targetFps)`, and read-only `{ preset, auto, fps }` state. `onEnter()` resets timing measurements, retains the last preset and any explicit pre-entry Auto choice, and applies the preset. Session exit clears Auto.
 - `createXr(viewer, desktop, quality, scene): XrControls` exposes `enter(): Promise<void>`, `exit(): Promise<void>`, `reset(): Promise<void>`, `destroy()`, and read-only `state: 'unavailable' | 'idle' | 'starting' | 'active' | 'ending'`.
 
 `viewer.ts` contains engine-specific integration. Do not invent a public engine hook to satisfy these interfaces; verify against the pinned source in Task 1 and record the chosen calls.

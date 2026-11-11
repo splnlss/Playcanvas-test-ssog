@@ -6,7 +6,7 @@ import type { Viewer } from './viewer';
 import { createVrMenu, type MenuAction } from './vr-menu';
 import { createXrLifecycle, vrMotion } from './xr-state';
 
-export function createXr(viewer: Viewer, desktop: DesktopControls, quality: QualityControls, scene: SceneConfig, guideActions: MenuAction[] = [], guideReadout = () => '') {
+export function createXr(viewer: Viewer, desktop: DesktopControls, quality: QualityControls, scene: SceneConfig, cameraCopy: { capture(): void; readonly label: string }, guideActions: MenuAction[] = [], guideReadout = () => '') {
   const { app, xr, player } = viewer;
   let ending = false, localFallback = false, armed = false, disposed = false;
   const lifecycle = createXrLifecycle<DesktopSnapshot>(snapshot => {
@@ -33,8 +33,9 @@ export function createXr(viewer: Viewer, desktop: DesktopControls, quality: Qual
       run: () => quality.select(preset),
     })) : []),
     ...(streamed ? [{ label: () => `Auto quality: ${quality.state.auto ? 'ON' : 'OFF'}`, run: () => quality.setAuto(!quality.state.auto) }] : []),
+    { label: () => cameraCopy.label, run: cameraCopy.capture },
     ...guideActions,
-  ], () => `${Math.round(quality.state.fps)} app FPS · ${streamed ? quality.state.preset.toUpperCase() : 'Single SOG / no LOD'} · ${xr.frameRate ?? 72} target Hz${xr.frameRate ? '' : ' (fallback)'}`, guideReadout);
+  ], () => `${Math.round(quality.state.fps)} FPS · ${streamed ? quality.state.preset.toUpperCase() : 'SOG'} · ${xr.frameRate ?? 72} Hz${xr.frameRate ? '' : '*'} · ${Math.round(scene.vrRenderScale*100)}% res · FOV ${xr.fixedFoveation === null ? 'N/A' : xr.fixedFoveation.toFixed(1)}`, guideReadout);
   const onStart = () => {
     if (disposed) return;
     lifecycle.activate(); positionForVr(); quality.onEnter(); menu.hide();
@@ -48,7 +49,7 @@ export function createXr(viewer: Viewer, desktop: DesktopControls, quality: Qual
     player.camera.setLocalPosition(0,0,0); player.camera.setLocalEulerAngles(0,0,0);
     player.root.setPosition(...scene.vr.position); player.root.setEulerAngles(0,scene.vr.heading,0);
     try {
-      xr.start(player.camera.camera!,XRTYPE_VR,localFallback ? XRSPACE_LOCAL : XRSPACE_LOCALFLOOR,{ callback: error => {
+      xr.start(player.camera.camera!,XRTYPE_VR,localFallback ? XRSPACE_LOCAL : XRSPACE_LOCALFLOOR,{ framebufferScaleFactor: scene.vrRenderScale, callback: error => {
         if (!error) { resolve(); return; }
         if (error.name === 'NotSupportedError') localFallback = true;
         lifecycle.end(); reject(error);

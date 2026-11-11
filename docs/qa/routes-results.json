@@ -1,0 +1,68 @@
+{
+  "checks": [
+    {
+      "name": "Invalid ID shows error and keeps VR disabled",
+      "pass": true,
+      "evidence": {
+        "autoDisabled": true,
+        "enterDisabled": true,
+        "qualityDisabled": true,
+        "status": "Viewer could not start: Unknown scene: not-a-scene. Available scenes: sample, ronda, single.",
+        "title": "Streaming SOG viewer",
+        "url": "http://localhost:5173/?scene=not-a-scene"
+      }
+    },
+    {
+      "name": "Single SOG loads and disables LOD controls",
+      "pass": true,
+      "evidence": {
+        "autoDisabled": true,
+        "enterDisabled": true,
+        "qualityDisabled": true,
+        "status": "Single SOG \u2014 not streamed; LOD budget controls unavailable",
+        "title": "Apartment \u00b7 single SOG",
+        "url": "http://localhost:5173/?scene=single"
+      }
+    },
+    {
+      "name": "Apartment explicit scene loads",
+      "pass": true,
+      "evidence": {
+        "autoDisabled": false,
+        "enterDisabled": true,
+        "qualityDisabled": false,
+        "status": "Ready \u00b7 scene detail streams as you explore",
+        "title": "Apartment \u00b7 streamed",
+        "url": "http://localhost:5173/?scene=sample"
+      }
+    },
+    {
+      "name": "Production build loads Ronda by default",
+      "pass": true,
+      "evidence": {
+        "autoDisabled": false,
+        "enterDisabled": true,
+        "qualityDisabled": false,
+        "status": "Ready \u00b7 scene detail streams as you explore",
+        "title": "Ronda Lobato \u00b7 streamed",
+        "url": "http://127.0.0.1:5174/"
+      }
+    },
+    {
+      "name": "Narrow layout fits viewport",
+      "pass": true,
+      "evidence": {
+        "canvas": [
+          390,
+          844
+        ],
+        "client": 390,
+        "scroll": 390,
+        "viewport": [
+          390,
+          844
+        ]
+      }
+    }
+  ]
+}

@@ -4,3 +4,4 @@ dist/
 *.local
 public/sample/*
 !public/sample/.gitkeep
+public/ronda-sh0/

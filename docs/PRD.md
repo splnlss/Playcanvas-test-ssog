@@ -144,7 +144,7 @@ Use configured physical scale. Prefer floor-relative tracking; when unavailable,
 
 ## Adjustable VR performance
 
-Manual control is the default: Auto quality starts off. Low, Medium, and High map to distinct, documented engine-supported splat/LOD budgets. Exact values are established using the sample scene and Quest 3, and remain editable in configuration. Start at Medium. Preserve the last active preset across VR exit/re-entry within the page session; reset Auto to off on every entry.
+Manual control is the default: Auto quality starts off. Low, Medium, and High map to distinct, documented engine-supported splat/LOD budgets. Exact values are established using the sample scene and Quest 3, and remain editable in configuration. Start at Medium. Preserve the last active preset across VR exit/re-entry within the page session; clear Auto on session exit. The user-approved checkbox correction allows an explicit pre-entry Auto choice to carry into the next session.
 
 Selecting a preset applies it without restarting the session or reloading the entire scene. Confirm live budget changes during the feasibility milestone; if unavailable, report the blocker before changing this requirement. Do not silently substitute resolution-only presets. Allow streaming to settle as detail changes. In manual mode, no automatic process silently overrides the chosen budget.
 
@@ -162,7 +162,7 @@ Handle invalid manifests, missing assets, CORS/network failures, and unsupported
 
 ## Technical approach
 
-Use a small standalone PlayCanvas Engine app suitable for static hosting, with WebGL2 as the planned backend. WebGPU exploration is outside prototype scope. PlayCanvas recommends WebGL2 for XR where the browser lacks the WebGPU/XR bridge; validate the actual headset rather than assuming compatibility. See [XR backend requirements](https://developer.playcanvas.com/user-manual/web-components/xr/). Pin the engine version after confirming that native streaming and immersive stereo rendering work together on Quest 3. Prefer built-in engine loading and resource controls over a custom streaming system.
+Use a small standalone PlayCanvas Engine app suitable for static hosting, with WebGL2 as the planned backend. User-authorized update: add WebGPU with runtime capability detection and WebGL2 fallback. Auto prefers WebGPU only when both WebGPU and XRGPUBinding are exposed; explicit renderer links support comparison. PlayCanvas recommends WebGL2 for XR where the browser lacks the WebGPU/XR bridge; validate the actual headset rather than assuming compatibility. See [XR backend requirements](https://developer.playcanvas.com/user-manual/web-components/xr/). Pin the engine version after confirming that native streaming and immersive stereo rendering work together on Quest 3. Prefer built-in engine loading and resource controls over a custom streaming system.
 
 Keep scene configuration, camera controls, XR lifecycle, and interface state understandable without building a framework around them. Maintain loading state separately from XR state. Scene assets may live on another HTTPS host with appropriate CORS permissions.
 
@@ -177,7 +177,7 @@ Keep scene configuration, camera controls, XR lifecycle, and interface state und
 | VR controls | Flight, vertical movement, one snap per stick deflection, menu selection, reset fade, and exit work on controllers. |
 | Quality | On streamed scenes, each preset changes its configured budget during VR; FPS and active preset are visible; manual selection remains unchanged until the tester changes it. |
 | Auto quality (optional) | If included, enabling Auto permits preset changes; manual selection disables it, without rapid oscillation. Deferral does not block manual-quality acceptance. |
-| Lifecycle | Five entry/exit cycles restore desktop pose, orbit target, mode, and quality without automatic pointer capture, duplicate controls, sessions, or persistent movement; Auto starts off on re-entry. |
+| Lifecycle | Five entry/exit cycles restore desktop pose, orbit target, mode, and quality without automatic pointer capture, duplicate controls, sessions, or persistent movement; Auto is cleared on exit unless explicitly selected again before entry. |
 | Failure | Failed initial loads, missing refinement chunks, denied VR entry, and controller disconnects leave a recoverable interface. |
 | Deployment | The static app opens over HTTPS and loads its separately hosted assets where configured. |
 

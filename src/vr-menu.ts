@@ -35,7 +35,7 @@ export function createVrMenu(viewer: Viewer, actions: MenuAction[], readout: () 
   let fade: { time: number; moved: boolean; action: () => void; done: () => void } | undefined;
   const draw = () => {
     ctx.fillStyle = '#102028'; ctx.fillRect(0,0,768,1024);
-    ctx.fillStyle = '#e5f4ed'; ctx.font = 'bold 34px sans-serif'; ctx.fillText('VIEWER CONTROLS',32,54);
+    ctx.fillStyle = '#e5f4ed'; ctx.font = 'bold 34px sans-serif'; ctx.fillText(`VIEWER · ${viewer.backendLabel}`,32,54);
     ctx.font = '24px sans-serif'; ctx.fillText('Right trigger selects · Left X closes',32,100);
     ctx.fillStyle = '#9dd4bb'; ctx.fillText(readout(),32,142,700);
     ctx.font = '22px sans-serif';

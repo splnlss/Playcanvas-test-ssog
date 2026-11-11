@@ -7,3 +7,6 @@ h1{font-size:25px;line-height:1.2;margin:8px 0 12px}.eyebrow{font-size:11px;lett
 
 .guide-controls{margin-top:16px;border-top:1px solid #455a60;padding-top:12px}.guide-controls p{margin:8px 0}#guide-status{color:#adc8c0;overflow-wrap:anywhere}#guide-buttons button{padding:6px 9px;font-size:13px}#guide-caption:not(:empty){padding:10px;background:#203e43;border-radius:6px}main{max-height:calc(100vh - 70px);overflow:auto}
 main{max-width:380px;padding:18px}.toolbar button,.toolbar select{font-size:13px}h1{font-size:22px}
+#status{overflow-wrap:anywhere}
+
+#camera-json{display:block;width:100%;max-width:100%;margin:8px 0;font:12px/1.4 monospace;background:#102028;color:#ecf3ee;border:1px solid #608078;resize:vertical}

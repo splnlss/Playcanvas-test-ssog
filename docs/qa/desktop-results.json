@@ -1,0 +1,186 @@
+{
+  "checks": [
+    {
+      "name": "Orbit drag moves camera",
+      "pass": true,
+      "evidence": {
+        "initial": {
+          "p": [
+            0,
+            1.600000023841858,
+            5
+          ],
+          "q": [
+            -2.38418573772492e-09,
+            0,
+            0,
+            1
+          ]
+        },
+        "orbited": {
+          "p": [
+            -1.9252279996871948,
+            2.3471906185150146,
+            4.553592205047607
+          ],
+          "q": [
+            -0.07343609864105283,
+            -0.19811084969006798,
+            -0.014886235355473692,
+            0.9773114297133756
+          ]
+        }
+      }
+    },
+    {
+      "name": "Wheel zoom changes position",
+      "pass": true,
+      "evidence": {
+        "zoomed": {
+          "p": [
+            -2.3514788150787354,
+            2.512620687484741,
+            5.561770439147949
+          ],
+          "q": [
+            -0.07343609296707172,
+            -0.19811083072201385,
+            -0.014886233727586136,
+            0.9773114340095346
+          ]
+        }
+      }
+    },
+    {
+      "name": "Right drag pans camera",
+      "pass": true,
+      "evidence": {
+        "panned": {
+          "p": [
+            -2.5886080265045166,
+            2.7843503952026367,
+            5.41692590713501
+          ],
+          "q": [
+            -0.0734360967144558,
+            -0.19811083055861667,
+            -0.014886233358363862,
+            0.9773114337666988
+          ]
+        }
+      }
+    },
+    {
+      "name": "Orbit to Fly preserves pose",
+      "pass": true,
+      "evidence": {
+        "switched": {
+          "p": [
+            -2.5886080265045166,
+            2.7843503952026367,
+            5.41692590713501
+          ],
+          "q": [
+            -0.0734360967144558,
+            -0.19811083055861667,
+            -0.014886233358363862,
+            0.9773114337666988
+          ]
+        }
+      }
+    },
+    {
+      "name": "Fly captures pointer",
+      "pass": true
+    },
+    {
+      "name": "W flies at configured speed",
+      "pass": true,
+      "evidence": {
+        "moved": 0.9007516773604656,
+        "elapsed": 0.6005000000000001
+      }
+    },
+    {
+      "name": "E ascends",
+      "pass": true,
+      "evidence": {
+        "delta": [
+          0,
+          0.5254487991333008,
+          0
+        ]
+      }
+    },
+    {
+      "name": "Shift boost moves faster",
+      "pass": true,
+      "evidence": {
+        "distance": 1.2005997817287093
+      }
+    },
+    {
+      "name": "Pointer release succeeds",
+      "pass": true
+    },
+    {
+      "name": "No movement after pointer release",
+      "pass": true
+    },
+    {
+      "name": "Reset restores initial Orbit pose",
+      "pass": true,
+      "evidence": {
+        "after": {
+          "p": [
+            0,
+            1.600000023841858,
+            5
+          ],
+          "q": [
+            -2.38418573772492e-09,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "Auto preselection survives readout refresh",
+      "pass": true
+    },
+    {
+      "name": "Manual preset clears Auto",
+      "pass": true
+    },
+    {
+      "name": "Reload 1 reaches Ready",
+      "pass": true,
+      "evidence": {
+        "assets": 9,
+        "players": 1,
+        "splats": 1
+      }
+    },
+    {
+      "name": "Reload 2 reaches Ready",
+      "pass": true,
+      "evidence": {
+        "assets": 9,
+        "players": 1,
+        "splats": 1
+      }
+    },
+    {
+      "name": "Reload 3 reaches Ready",
+      "pass": true,
+      "evidence": {
+        "assets": 9,
+        "players": 1,
+        "splats": 1
+      }
+    }
+  ],
+  "exceptions": []
+}
