@@ -1,0 +1,980 @@
+{
+  "audioUrl": "/guide/ronda-intro-30s.mp3",
+  "audioRevision": "sha256:933554d95293e86a02db945122e51f2bc4d70394a92251750a422a832b2be606",
+  "cueAudioRevision": "sha256:933554d95293e86a02db945122e51f2bc4d70394a92251750a422a832b2be606",
+  "captions": [
+    {
+      "start": 0.0,
+      "end": 1.2,
+      "text": "My name is Joseph Lobato."
+    },
+    {
+      "start": 1.66,
+      "end": 3.16,
+      "text": "We're here today on my family ranch."
+    },
+    {
+      "start": 4.44,
+      "end": 6.02,
+      "text": "And I'm Ronda Lobato."
+    },
+    {
+      "start": 6.82,
+      "end": 8.46,
+      "text": "I grew up in San Luis."
+    },
+    {
+      "start": 9.14,
+      "end": 11.58,
+      "text": "This farm is our heaven on earth."
+    },
+    {
+      "start": 13.46,
+      "end": 16.42,
+      "text": "Unfortunately, this year we're experiencing a drought and it's"
+    },
+    {
+      "start": 16.42,
+      "end": 18.6,
+      "text": "just extremely horrible."
+    },
+    {
+      "start": 19.26,
+      "end": 21.16,
+      "text": "Haven't had any water on the property at all."
+    },
+    {
+      "start": 22.44,
+      "end": 26.04,
+      "text": "Our senior water rights are further down the watershed."
+    },
+    {
+      "start": 26.62,
+      "end": 29.44,
+      "text": "We essentially get the right to use the water last."
+    }
+  ],
+  "cues": [
+    {
+      "start": 0.0,
+      "end": 0.02,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 0.02,
+      "end": 0.1,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 0.1,
+      "end": 0.24,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 0.24,
+      "end": 0.32,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 0.32,
+      "end": 0.5,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 0.5,
+      "end": 0.57,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 0.57,
+      "end": 0.64,
+      "viseme": "O",
+      "weight": 1
+    },
+    {
+      "start": 0.64,
+      "end": 0.71,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 0.71,
+      "end": 0.78,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 0.78,
+      "end": 0.85,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 0.85,
+      "end": 0.93,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 0.93,
+      "end": 1.02,
+      "viseme": "A",
+      "weight": 1
+    },
+    {
+      "start": 1.02,
+      "end": 1.09,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 1.09,
+      "end": 1.23,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 1.23,
+      "end": 1.79,
+      "viseme": "O",
+      "weight": 1
+    },
+    {
+      "start": 1.79,
+      "end": 2.14,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 2.14,
+      "end": 2.28,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 2.28,
+      "end": 2.35,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 2.35,
+      "end": 2.43,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 2.43,
+      "end": 2.56,
+      "viseme": "E",
+      "weight": 0.6
+    },
+    {
+      "start": 2.56,
+      "end": 2.63,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 2.63,
+      "end": 2.71,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 2.71,
+      "end": 2.93,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 2.93,
+      "end": 3.14,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 3.14,
+      "end": 3.28,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 3.28,
+      "end": 4.84,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 4.84,
+      "end": 5.04,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 5.04,
+      "end": 5.18,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 5.18,
+      "end": 5.29,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 5.29,
+      "end": 5.34,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 5.34,
+      "end": 5.46,
+      "viseme": "A",
+      "weight": 1
+    },
+    {
+      "start": 5.46,
+      "end": 5.53,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 5.53,
+      "end": 5.6,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 5.6,
+      "end": 5.67,
+      "viseme": "E",
+      "weight": 0.8
+    },
+    {
+      "start": 5.67,
+      "end": 5.75,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 5.75,
+      "end": 5.85,
+      "viseme": "A",
+      "weight": 1
+    },
+    {
+      "start": 5.85,
+      "end": 5.92,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 5.92,
+      "end": 6.13,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 6.13,
+      "end": 6.2,
+      "viseme": "O",
+      "weight": 1
+    },
+    {
+      "start": 6.2,
+      "end": 6.39,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 6.39,
+      "end": 6.97,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 6.97,
+      "end": 7.3,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 7.3,
+      "end": 7.35,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 7.35,
+      "end": 7.53,
+      "viseme": "O",
+      "weight": 1
+    },
+    {
+      "start": 7.53,
+      "end": 7.6,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 7.6,
+      "end": 7.68,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 7.68,
+      "end": 8.09,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 8.09,
+      "end": 8.16,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 8.16,
+      "end": 8.3,
+      "viseme": "O",
+      "weight": 1
+    },
+    {
+      "start": 8.3,
+      "end": 8.51,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 8.51,
+      "end": 9.13,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 9.13,
+      "end": 9.24,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 9.24,
+      "end": 9.54,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 9.54,
+      "end": 9.77,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 9.77,
+      "end": 9.98,
+      "viseme": "E",
+      "weight": 0.6
+    },
+    {
+      "start": 9.98,
+      "end": 10.05,
+      "viseme": "A",
+      "weight": 1
+    },
+    {
+      "start": 10.05,
+      "end": 10.12,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 10.12,
+      "end": 10.24,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 10.24,
+      "end": 10.64,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 10.64,
+      "end": 10.7,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 10.7,
+      "end": 10.75,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 10.75,
+      "end": 10.96,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 10.96,
+      "end": 11.03,
+      "viseme": "E",
+      "weight": 0.6
+    },
+    {
+      "start": 11.03,
+      "end": 11.38,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 11.38,
+      "end": 12.57,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 12.57,
+      "end": 13.55,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 13.55,
+      "end": 13.81,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 13.81,
+      "end": 13.88,
+      "viseme": "E",
+      "weight": 0.6
+    },
+    {
+      "start": 13.88,
+      "end": 14.02,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 14.02,
+      "end": 14.3,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 14.3,
+      "end": 14.59,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 14.59,
+      "end": 14.95,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 14.95,
+      "end": 15.02,
+      "viseme": "O",
+      "weight": 1
+    },
+    {
+      "start": 15.02,
+      "end": 15.16,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 15.16,
+      "end": 15.24,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 15.24,
+      "end": 15.65,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 15.65,
+      "end": 15.72,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 15.72,
+      "end": 15.93,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 15.93,
+      "end": 16.07,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 16.07,
+      "end": 18.1,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 18.1,
+      "end": 18.18,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 18.18,
+      "end": 18.25,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 18.25,
+      "end": 18.52,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 18.52,
+      "end": 18.6,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 18.6,
+      "end": 18.73,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 18.73,
+      "end": 19.48,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 19.48,
+      "end": 19.75,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 19.75,
+      "end": 19.82,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 19.82,
+      "end": 19.89,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 19.89,
+      "end": 20.03,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 20.03,
+      "end": 20.1,
+      "viseme": "O",
+      "weight": 1
+    },
+    {
+      "start": 20.1,
+      "end": 20.38,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 20.38,
+      "end": 20.45,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 20.45,
+      "end": 20.55,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 20.55,
+      "end": 20.59,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 20.59,
+      "end": 20.67,
+      "viseme": "M",
+      "weight": 1
+    },
+    {
+      "start": 20.67,
+      "end": 20.95,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 20.95,
+      "end": 21.16,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 21.16,
+      "end": 21.33,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 21.33,
+      "end": 22.43,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 22.43,
+      "end": 22.72,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 22.72,
+      "end": 22.87,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 22.87,
+      "end": 22.94,
+      "viseme": "A",
+      "weight": 1
+    },
+    {
+      "start": 22.94,
+      "end": 23.29,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 23.29,
+      "end": 23.36,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 23.36,
+      "end": 23.43,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 23.43,
+      "end": 23.6,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 23.6,
+      "end": 23.66,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 23.66,
+      "end": 23.71,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 23.71,
+      "end": 23.85,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 23.85,
+      "end": 23.92,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 23.92,
+      "end": 23.99,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 23.99,
+      "end": 24.27,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 24.27,
+      "end": 24.34,
+      "viseme": "A",
+      "weight": 1
+    },
+    {
+      "start": 24.34,
+      "end": 24.41,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 24.41,
+      "end": 24.55,
+      "viseme": "E",
+      "weight": 0.6
+    },
+    {
+      "start": 24.55,
+      "end": 24.62,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 24.62,
+      "end": 24.69,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 24.69,
+      "end": 24.76,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 24.76,
+      "end": 24.83,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 24.83,
+      "end": 25.04,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 25.04,
+      "end": 25.11,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 25.11,
+      "end": 25.25,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 25.25,
+      "end": 25.49,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 25.49,
+      "end": 25.55,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 25.55,
+      "end": 25.67,
+      "viseme": "O",
+      "weight": 1
+    },
+    {
+      "start": 25.67,
+      "end": 25.74,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 25.74,
+      "end": 25.88,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 25.88,
+      "end": 26.02,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 26.02,
+      "end": 26.09,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 26.09,
+      "end": 26.3,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 26.3,
+      "end": 26.71,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 26.71,
+      "end": 26.78,
+      "viseme": "O",
+      "weight": 1
+    },
+    {
+      "start": 26.78,
+      "end": 26.99,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 26.99,
+      "end": 27.13,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 27.13,
+      "end": 27.41,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 27.41,
+      "end": 27.55,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 27.55,
+      "end": 27.76,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 27.76,
+      "end": 27.83,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 27.83,
+      "end": 27.97,
+      "viseme": "neutral",
+      "weight": 0
+    },
+    {
+      "start": 27.97,
+      "end": 28.04,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 28.04,
+      "end": 28.11,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 28.11,
+      "end": 28.18,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 28.18,
+      "end": 28.67,
+      "viseme": "O",
+      "weight": 1
+    },
+    {
+      "start": 28.67,
+      "end": 28.74,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 28.74,
+      "end": 28.81,
+      "viseme": "O",
+      "weight": 1
+    },
+    {
+      "start": 28.81,
+      "end": 28.88,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 28.88,
+      "end": 28.95,
+      "viseme": "E",
+      "weight": 0.45
+    },
+    {
+      "start": 28.95,
+      "end": 29.09,
+      "viseme": "O",
+      "weight": 0.6
+    },
+    {
+      "start": 29.09,
+      "end": 29.23,
+      "viseme": "E",
+      "weight": 0.8
+    },
+    {
+      "start": 29.23,
+      "end": 29.51,
+      "viseme": "A",
+      "weight": 0.65
+    },
+    {
+      "start": 29.51,
+      "end": 30.0,
+      "viseme": "E",
+      "weight": 0.45
+    }
+  ],
+  "provenance": {
+    "sourceUrl": "https://pub-dd92ae5131ec49f1bbd411b51a858249.r2.dev/01_SLV_RondaJoseph/20261030_SLV-Joseph-Ronda.mp3",
+    "sourceStartSeconds": 0,
+    "sourceEndSeconds": 30,
+    "durationSeconds": 30,
+    "captionsStatus": "automatic draft, not human-reviewed",
+    "transcription": "mlx-whisper / mlx-community/whisper-small-mlx; English; name/place prompt: Joseph Lobato, Ronda Lobato, San Luis, Colorado",
+    "mouthCues": "Rhubarb Lip Sync 1.14.0 / pocketSphinx with automatic transcript; mapped to prototype A/E/O/M/neutral"
+  }
+}

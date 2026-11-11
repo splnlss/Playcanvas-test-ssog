@@ -39,3 +39,13 @@ Inspected the mannequin seated on the actual scanned pipe from the saved default
 Scene placement lives in `src/guide/placement.ts`; `ronda` and `ronda-full` share it. The synthetic fixture retains its separate original camera/seat and uses a separate camera-bookmark scene ID. Unauthored scenes do not enable the guide. Ground/route clearance and production collision remain unverified. The missing audio package still leaves the sequence seated at the speech checkpoint.
 
 Regression tests cover the actual pelvis contact height, route rotation/start, shared Ronda placement, unsupported-scene gating, and the unchanged fixture seat. Full suite: 62 tests passed in 15 files; TypeScript/production build passed with the existing engine-bundle size warning. Independent review found no Important or Critical alignment/merge regressions; its fixture bookmark overlap was corrected by isolating the fixture ID.
+
+## Supplied 30-second speech excerpt
+
+The user supplied `20261030_SLV-Joseph-Ronda.mp3` and requested its first 30 seconds. Bundled `public/guide/ronda-intro-30s.mp3` contains source seconds 0–30, re-encoded as mono 24 kHz MP3. FFprobe reports exactly 30.000000 seconds and 297839 bytes. The runtime fetches this local excerpt rather than the full remote recording.
+
+Generated 10 automatic caption intervals locally with MLX Whisper and 152 offline mouth intervals with Rhubarb Lip Sync 1.14.0/pocketSphinx. Both are attached to the exact excerpt's SHA-256 in `src/guide/ronda-speech.json`. Captions are an unreviewed draft; Rhubarb shapes are simplified to the mannequin's diagnostic facial controls. Source/procedure/mapping are documented in `public/guide/README.md`, with the raw timing labels retained for future rig mapping.
+
+New regressions failed before configuration, then passed: matching the bundled bytes to the cue revision and retaining the seated speech checkpoint until media completion, followed by standing/one-shot completion. Full suite: 64 tests passed in 16 files; TypeScript/production build passed with the existing engine-bundle warning.
+
+In a new browser fixture pane, a trusted Start click resumed Web Audio (`AudioContext.state = running`). Actual HTML media reported duration 30, currentTime 0 and paused=false at start. At the end it reported currentTime=30, ended=true, paused=true, and the guide reported `completed · done`. Temporary native application ticks were used where the embedded pane withheld frame callbacks; the audio clock itself was not simulated. Final captions/facial weights were neutral. This verifies decode/playback/end sequencing, not human-reviewed caption accuracy, heard positional balance or Quest acceptance.
