@@ -9,7 +9,7 @@ export type SpeechPackage = {
   captions: (Interval & { text: string })[];
   cues: (Interval & { viseme: string; weight: number })[];
 };
-export type PlaybackMedia = Pick<HTMLAudioElement, 'currentTime' | 'duration' | 'paused' | 'ended' | 'readyState' | 'error' | 'src' | 'crossOrigin' | 'volume' | 'muted' | 'play' | 'pause' | 'load' | 'removeAttribute'>;
+export type PlaybackMedia = Pick<HTMLAudioElement, 'currentTime' | 'duration' | 'paused' | 'ended' | 'readyState' | 'error' | 'src' | 'crossOrigin' | 'volume' | 'muted' | 'play' | 'pause' | 'load' | 'removeAttribute'> & Partial<Pick<HTMLAudioElement, 'addEventListener' | 'removeEventListener'>>;
 const visemes = new Set(['neutral', 'A', 'E', 'O', 'M']);
 
 /** Small prototype vocabulary; production rig/cue mappings must be validated separately. */
@@ -29,10 +29,10 @@ export function validateSpeech(content: SpeechPackage, duration?: number) {
   if (content.captions.some(c => !c.text.trim())) throw new Error('Caption text is required.');
   if (content.cues.some(c => !visemes.has(c.viseme) || !Number.isFinite(c.weight) || c.weight < 0 || c.weight > 1)) throw new Error('Unsupported viseme or invalid weight.');
 }
-export function sampleSpeech(content: SpeechPackage, time: number, active: boolean) {
+export function sampleSpeech(content: SpeechPackage, time: number, active: boolean, mouthLead = content.mouthLeadSeconds ?? 0) {
   if (!active || !Number.isFinite(time)) return { caption: '', weights: {} as Record<string, number> };
   const caption = content.captions.find(c => time >= c.start && time < c.end)?.text ?? '';
-  const mouthTime = time + (content.mouthLeadSeconds ?? 0);
+  const mouthTime = time + mouthLead;
   const cue = content.cues.find(c => mouthTime >= c.start && mouthTime < c.end);
   const weights: Record<string, number> = {};
   if (cue && cue.viseme !== 'neutral') {
@@ -45,6 +45,8 @@ export function sampleSpeech(content: SpeechPackage, time: number, active: boole
 export function createGuideSpeech(content?: SpeechPackage, media: PlaybackMedia = new Audio()) {
   const snapshot: SpeechSnapshot = { status: 'idle', time: 0, caption: '', weights: {}, error: '' };
   let epoch = 0, disposed = false, intended = false, begun = false;
+  let mouthLead = content?.mouthLeadSeconds ?? 0;
+  let endTime: number | undefined;
   let pending: Promise<void> | undefined;
   let context: AudioContext | undefined, panner: PannerNode | undefined, gain: GainNode | undefined;
   const neutral = () => { snapshot.weights = {}; snapshot.caption = ''; };
@@ -52,6 +54,7 @@ export function createGuideSpeech(content?: SpeechPackage, media: PlaybackMedia 
   if (content) { media.crossOrigin = 'anonymous'; media.src = content.audioUrl; }
   const voice: GuideSpeech & {
     unlock(): Promise<void>; spatial(head: Vec3Tuple, listener: Vec3Tuple, forward: Vec3Tuple, up: Vec3Tuple): void;
+    readonly mouthLead: number; setMouthLead(value: number): void;
     setVolume(value: number): void; setMuted(value: boolean): void;
   } = {
     snapshot,
@@ -65,12 +68,13 @@ export function createGuideSpeech(content?: SpeechPackage, media: PlaybackMedia 
       }
       await context.resume();
     },
-    play() {
+    play(until) {
       if (disposed) return Promise.reject(new Error('Speech disposed.'));
       if (pending) return pending;
       if (!content) { const e = new Error('Final voice recording, checked captions and mouth cues are not configured. Pose preview is seated; add them in src/guide/config.ts, then reload.'); failure(e); return Promise.reject(e); }
       try { validateSpeech(content, media.duration); } catch (error) { failure(error); return Promise.reject(error); }
-      if (media.ended) media.currentTime = 0;
+      if (media.ended || snapshot.status === 'ended') media.currentTime = 0;
+      endTime = until;
       intended = true; snapshot.status = 'waiting'; snapshot.error = '';
       const attempt = ++epoch;
       // Called directly by gesture handlers on Resume/Enable audio, before any await.
@@ -87,6 +91,7 @@ export function createGuideSpeech(content?: SpeechPackage, media: PlaybackMedia 
     pause() { epoch++; pending = undefined; intended = false; media.pause(); if (begun) snapshot.status = 'paused'; },
     stop() {
       epoch++; pending = undefined; intended = begun = false; media.pause(); media.currentTime = 0;
+      endTime = undefined;
       snapshot.time = 0; snapshot.status = 'idle'; snapshot.error = ''; neutral();
     },
     update() {
@@ -95,9 +100,9 @@ export function createGuideSpeech(content?: SpeechPackage, media: PlaybackMedia 
       try { if (Number.isFinite(media.duration)) validateSpeech(content, media.duration); }
       catch (error) { failure(error); return; }
       snapshot.time = media.currentTime;
-      if (begun && media.ended) { snapshot.status = 'ended'; intended = false; neutral(); return; }
+      if (begun && (media.ended || (endTime !== undefined && media.currentTime >= endTime))) { snapshot.status = 'ended'; intended = false; media.pause(); neutral(); return; }
       if (intended && begun) snapshot.status = media.paused || media.readyState < 3 ? 'waiting' : 'playing';
-      const sample = sampleSpeech(content, snapshot.time, begun && snapshot.status !== 'idle');
+      const sample = sampleSpeech(content, snapshot.time, begun && snapshot.status !== 'idle', mouthLead);
       snapshot.caption = sample.caption; snapshot.weights = sample.weights;
     },
     spatial(head, listener, forward, up) {
@@ -108,13 +113,18 @@ export function createGuideSpeech(content?: SpeechPackage, media: PlaybackMedia 
       [context.listener.forwardX, context.listener.forwardY, context.listener.forwardZ].forEach((p, i) => p.setValueAtTime(forward[i], time));
       [context.listener.upX, context.listener.upY, context.listener.upZ].forEach((p, i) => p.setValueAtTime(up[i], time));
     },
+    get mouthLead() { return mouthLead; },
+    setMouthLead(value) { if (Number.isFinite(value)) mouthLead = Math.max(-0.3, Math.min(0.6, Math.round(value * 1000) / 1000)); },
     setVolume(value) { if (Number.isFinite(value)) media.volume = Math.max(0, Math.min(value, 1)); },
     setMuted(value) { media.muted = value; },
     destroy() {
       if (disposed) return;
+      media.removeEventListener?.('timeupdate', onMediaTime);
       voice.stop(); disposed = true; media.removeAttribute('src'); media.load();
       panner?.disconnect(); gain?.disconnect(); if (context) void context.close().catch(() => {});
     },
   };
+  const onMediaTime = () => { if (endTime !== undefined) voice.update(); };
+  media.addEventListener?.('timeupdate', onMediaTime);
   return voice;
 }

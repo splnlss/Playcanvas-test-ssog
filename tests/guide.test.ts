@@ -84,3 +84,17 @@ it('offers a working primary Restart after Stop and Resume after Pause', () => {
   g.pause(); expect(primary.label()).toContain('Resume'); primary.run();
   expect(g.state).toBe('running');
 });
+
+it('starts a six second lip sync sample seated without walking and resets for normal Restart', () => {
+  const voice = speech(), ends: (number | undefined)[] = [];
+  voice.play = async end => { ends.push(end); voice.snapshot.status = 'playing'; };
+  const g = createGuideSequence(voice);
+  g.testLipSync();
+  expect(g.state).toBe('running'); expect(g.checkpoint).toBe('talk');
+  expect(g.pose.seated).toBe(1); expect(g.pose.position).toEqual([0, 0, 0.6]);
+  expect(ends).toEqual([6]);
+  g.pause(); g.resume(); expect(ends).toEqual([6, 6]);
+  g.restart(); until(g, () => g.state === 'running' && g.checkpoint === 'walk');
+  until(g, () => g.checkpoint === 'talk'); g.update(0.05);
+  expect(ends.at(-1)).toBeUndefined();
+});

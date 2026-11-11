@@ -7,7 +7,7 @@ export type SpeechSnapshot = {
 };
 export type GuideSpeech = {
   readonly snapshot: SpeechSnapshot;
-  play(): Promise<void>; pause(): void; stop(): void; update(): void; destroy(): void;
+  play(endTime?: number): Promise<void>; pause(): void; stop(): void; update(): void; destroy(): void;
 };
 export type GuidePose = { position: Vec3Tuple; yaw: number; seated: number; distance: number; moving: boolean; opacity: number };
 export type GuideState = 'ready' | 'running' | 'pausing' | 'paused' | 'stopping' | 'stopped' | 'restarting' | 'failed' | 'completed' | 'disposed';
@@ -17,6 +17,7 @@ type Checkpoint = 'walk' | 'align' | 'sit' | 'talk' | 'stand' | 'done';
 export function createGuideSequence(speech: GuideSpeech) {
   let state: GuideState = 'ready', checkpoint: Checkpoint = 'walk', error = '';
   let waypoint = 0, transition = 0, restartTime = 0, epoch = 0, talking = false;
+  let speechEnd: number | undefined;
   let pending: 'pause' | 'stop' | 'restart' | undefined;
   const pose: GuidePose = { position: [...config.start], yaw: -90, seated: 0, distance: 0, moving: false, opacity: 1 };
   const inTransition = () => checkpoint === 'sit' || checkpoint === 'stand';
@@ -24,7 +25,7 @@ export function createGuideSequence(speech: GuideSpeech) {
   const beginSpeech = () => {
     talking = true;
     const attempt = ++epoch;
-    void speech.play().catch(reason => { if (attempt === epoch && state === 'running' && checkpoint === 'talk') fail(reason); });
+    void speech.play(speechEnd).catch(reason => { if (attempt === epoch && state === 'running' && checkpoint === 'talk') fail(reason); });
   };
   const settle = () => {
     if (pending === 'restart') { pending = undefined; state = 'restarting'; restartTime = 0; }
@@ -38,11 +39,18 @@ export function createGuideSequence(speech: GuideSpeech) {
     return Math.abs(delta) <= step;
   };
   const reset = () => {
+    speechEnd = undefined;
     checkpoint = 'walk'; waypoint = transition = 0; talking = false; error = '';
     pose.position = [...config.start]; pose.yaw = -90; pose.seated = pose.distance = 0; pose.moving = false;
   };
   return {
     get state() { return state; }, get checkpoint() { return checkpoint; }, get error() { return error; }, pose,
+    testLipSync() {
+      if (state === 'disposed') return;
+      stopSpeech(); reset(); pending = undefined; pose.opacity = 1;
+      pose.position = [...config.route[config.route.length - 1]]; pose.yaw = 0; pose.seated = 1;
+      checkpoint = 'talk'; state = 'running'; speechEnd = 6; beginSpeech();
+    },
     start() { if (state === 'ready') state = 'running'; },
     pause() {
       if (state !== 'running') return;

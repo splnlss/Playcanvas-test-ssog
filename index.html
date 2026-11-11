@@ -26,9 +26,10 @@
       <label>VR quality <select id="quality" disabled><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></label>
       <label><input id="auto" type="checkbox" checked disabled> Auto quality in VR</label>
     </div>
-    <details class="guide-controls">
+    <details class="guide-controls" open>
       <summary>Guide pose prototype</summary>
       <p>Temporary mannequin · guessed route · collision not implemented. Starts 4 m to the right, approaches, turns and sits. Speech uses the first 30 seconds of the supplied recording, with automatic captions.</p>
+      <p>Test lip sync plays a seated 6-second sample immediately. If the mouth lags, choose Mouth earlier; timing changes apply live and are saved on this browser.</p>
       <div id="guide-buttons" class="toolbar"></div>
       <p><a href="?guide=fixture">Open synthetic guide fixture</a></p>
     </details>

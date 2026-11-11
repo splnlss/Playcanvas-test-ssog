@@ -61,3 +61,34 @@ it('advances mouth cues without advancing captions or animating blocked playback
   expect(() => validateSpeech({ ...tuned, mouthLeadSeconds: NaN })).toThrow(/mouth.*lead/i);
   expect(() => validateSpeech({ ...tuned, mouthLeadSeconds: 1 })).toThrow(/mouth.*lead/i);
 });
+
+it('retimes mouth cues live without seeking audio or changing captions', async () => {
+  const source = media(), voice = createGuideSpeech(content, source);
+  await voice.play(); source.currentTime = 0.15;
+  voice.setMouthLead(0.1); voice.update();
+  expect(voice.snapshot.weights).toEqual({ A: 0.8 });
+  expect(voice.snapshot.caption).toBe('Hello'); expect(source.currentTime).toBe(0.15);
+  voice.setMouthLead(-0.1); voice.update(); expect(voice.snapshot.weights).toEqual({});
+  voice.setMouthLead(NaN); expect(voice.mouthLead).toBe(-0.1);
+  voice.setMouthLead(5); expect(voice.mouthLead).toBe(0.6);
+});
+it('ends a short test at its media deadline and can replay or return to full speech', async () => {
+  const source = media(), voice = createGuideSpeech(content, source);
+  await voice.play(0.8); source.currentTime = 0.8; voice.update();
+  expect(source.paused).toBe(true); expect(voice.snapshot.status).toBe('ended');
+  expect(voice.snapshot.weights).toEqual({});
+  await voice.play(0.8); expect(source.currentTime).toBe(0);
+  source.currentTime = 0.3; voice.pause(); await voice.play(0.8);
+  expect(source.currentTime).toBe(0.3);
+  voice.stop(); await voice.play(); source.currentTime = 1.2; voice.update();
+  expect(voice.snapshot.status).toBe('playing');
+});
+it('stops a test from media events even when rendering is suspended', async () => {
+  const source = media(), events = new EventTarget();
+  Object.assign(source, { addEventListener: events.addEventListener.bind(events), removeEventListener: events.removeEventListener.bind(events) });
+  const voice = createGuideSpeech(content, source);
+  await voice.play(0.8); source.currentTime = 0.9;
+  events.dispatchEvent(new Event('timeupdate'));
+  expect(source.paused).toBe(true); expect(voice.snapshot.status).toBe('ended');
+  voice.destroy();
+});

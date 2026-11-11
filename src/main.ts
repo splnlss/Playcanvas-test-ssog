@@ -70,7 +70,7 @@ async function start() {
     [primaryGuideButton, ...guideButtons.children].forEach((button, i) => { (button as HTMLButtonElement).disabled = !guide!.available || guide!.actions[i].enabled?.() === false || loading || viewer.loading.state !== 'ready'; button.textContent = guide!.actions[i].label(); });
   };
   const vr = createXr(viewer,desktop,quality,scene,cameraCopy,
-    Array.from({ length: 8 }, (_, i) => ({ label: () => guide?.actions[i].label() ?? 'Guide unavailable', run: () => guide?.actions[i].run(), enabled: () => !!guide?.available && guide.actions[i].enabled?.() !== false })),
+    Array.from({ length: 12 }, (_, i) => ({ label: () => guide?.actions[i].label() ?? 'Guide unavailable', run: () => guide?.actions[i].run(), enabled: () => !!guide?.available && guide.actions[i].enabled?.() !== false })),
     () => guide?.status() ?? '');
   let loading = false;
   const refresh = () => {

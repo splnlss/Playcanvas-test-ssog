@@ -10,6 +10,17 @@ import { createGuidePresentation } from './presentation';
 
 export function createGuide(viewer: Viewer, fixture: boolean, sceneId: string) {
   const voice = createGuideSpeech(guideSpeech);
+  // Per-recording preference; unavailable/private storage must not block playback.
+  const timingKey = `guide-mouth-lead:${guideSpeech.audioRevision}`;
+  try {
+    const saved = localStorage.getItem(timingKey);
+    if (saved !== null) voice.setMouthLead(Number(saved));
+  } catch { /* Use the recording default. */ }
+  const adjustMouth = (delta: number) => {
+    voice.setMouthLead(voice.mouthLead + delta);
+    try { localStorage.setItem(timingKey, String(voice.mouthLead)); } catch { /* Session setting still applies. */ }
+  };
+  const timingLabel = () => `${Math.round(voice.mouthLead * 1000)} ms lead`;
   const sequence = createGuideSequence(voice);
   const placement = guidePlacement(sceneId, fixture);
   const presentation = createGuidePresentation(viewer.app, fixture, placement ?? guidePlacement('', true)!);
@@ -28,6 +39,10 @@ export function createGuide(viewer: Viewer, fixture: boolean, sceneId: string) {
     { label: () => voice.snapshot.status === 'waiting' ? 'Enable guide audio' : 'Retry guide action', run: () => gesture(() => sequence.retry()) },
     { label: () => `Guide sound: ${muted ? 'muted' : 'on'}`, run: () => { muted = !muted; voice.setMuted(muted); } },
     { label: () => `Guide volume: ${Math.round(volume * 100)}%`, run: () => { volume = volume <= 0.01 ? 1 : Math.max(0, volume - 0.25); voice.setVolume(volume); } },
+    { label: () => 'Test lip sync (6s)', run: () => gesture(() => sequence.testLipSync()) },
+    { label: () => `Mouth earlier +25 ms (${timingLabel()})`, run: () => adjustMouth(0.025) },
+    { label: () => `Mouth later −25 ms (${timingLabel()})`, run: () => adjustMouth(-0.025) },
+    { label: () => 'Reset mouth timing', run: () => adjustMouth((guideSpeech.mouthLeadSeconds ?? 0) - voice.mouthLead) },
     { label: () => `Guide captions: ${captions ? 'on' : 'off'}`, run: () => { captions = !captions; } },
   ];
   const status = () => !placement ? 'No guide route authored for this scene.' : !enabled ? 'Guide waiting for scene' : `${sequence.state} · ${sequence.checkpoint}${sequence.error ? ` · ${sequence.error}` : voice.snapshot.status === 'waiting' ? ' · Enable audio to continue' : notice ? ` · ${notice}` : ''}`;
