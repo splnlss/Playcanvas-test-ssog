@@ -1,0 +1,57 @@
+{
+  "checks": [
+    {
+      "name": "Missing initial manifest gives readable error and Retry",
+      "pass": true,
+      "evidence": "Error loading gsplat octree: https://pub-dd92ae5131ec49f1bbd411b51a858249.r2.dev/01_SLV_RondaJoseph/20260820_RondaLobato/web/lod/lod-meta.json [TypeError: Cannot read properties of null (reading 'lodLevels')]"
+    },
+    {
+      "name": "Retry recovers after manifest failure",
+      "pass": true
+    },
+    {
+      "name": "Coarse content ready with missing refinement",
+      "pass": true
+    },
+    {
+      "name": "Refinement failure preserves ready scene",
+      "pass": true,
+      "evidence": {
+        "missing": 1,
+        "splats": 764173,
+        "status": "Ready \u00b7 scene detail streams as you explore"
+      }
+    },
+    {
+      "name": "Reload recovers after missing refinement",
+      "pass": true
+    },
+    {
+      "name": "Native budget applies 250000",
+      "pass": true,
+      "evidence": {
+        "budget": 250000,
+        "fps": 59,
+        "splats": 247436
+      }
+    },
+    {
+      "name": "Native budget applies 500000",
+      "pass": true,
+      "evidence": {
+        "budget": 500000,
+        "fps": 59,
+        "splats": 418656
+      }
+    },
+    {
+      "name": "Native budget applies 1000000",
+      "pass": true,
+      "evidence": {
+        "budget": 1000000,
+        "fps": 59,
+        "splats": 994613
+      }
+    }
+  ]
+}

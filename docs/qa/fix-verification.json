@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "name": "Fly captures pointer for Escape test",
+      "pass": true
+    },
+    {
+      "name": "Escape releases pointer",
+      "pass": true
+    },
+    {
+      "name": "Long error stays within viewport",
+      "pass": true,
+      "evidence": {
+        "client": 612,
+        "scroll": 612
+      }
+    }
+  ],
+  "exceptions": []
+}

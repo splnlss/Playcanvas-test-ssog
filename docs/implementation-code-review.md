@@ -14,3 +14,9 @@ Date: 2026-11-11. Independent read-only code reviewer; separate from the earlier
 No critical or minor findings were reported. The reviewer noted the separate scene/player roots, head-pivot math, normalized flight, disconnect suppression, manual quality state and menu UV mapping as sound. All four findings were addressed in one fix pass; 33 tests and the production build pass.
 
 The reviewer did not claim hardware acceptance. Stereo appearance, scale, controller ergonomics, fade coverage in both eyes, performance and live quality require headset checks. Walking/avatars and Mac remote rendering remain separate scope. The active-frame loading deadline change was outside the review snapshot and has its own regression test.
+
+## Optimization and camera follow-up review
+
+The final read-only review of pending WebGPU/backend selection, SH0 preparation, camera copying, saved defaults, VR menu and quality settings found no Critical or Important issues. It verified actual head world-pose export, separate rig pose and local-space height handling, clipboard/manual-copy persistence, the seventh menu row fitting the panel, SH0 metadata URL rewriting and manifest-last preparation, and actual-device renderer headings.
+
+Fresh installations must run the documented `npm run prepare:ronda` before serving/building the default scene because generated metadata is ignored by Git. Fresh headset performance remains an acceptance limitation. Final integration verification: 43 tests and production build pass, with the existing engine chunk-size warning.

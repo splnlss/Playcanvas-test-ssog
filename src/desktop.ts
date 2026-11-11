@@ -93,6 +93,7 @@ export function createDesktop(viewer: Viewer, scene: SceneConfig) {
     e.preventDefault(); radius = Math.max(0.1, Math.min(1000, radius * Math.exp(e.deltaY * 0.001))); applyOrbit();
   }, { ...options, passive: false });
   window.addEventListener('keydown', e => {
+    if (e.code === 'Escape' && document.pointerLockElement === canvas) { release(); return; }
     if (e.target instanceof HTMLElement && e.target.closest('input,select,textarea,button')) return;
     input.key(e.code, true);
     if (enabled && mode === 'fly' && document.pointerLockElement === canvas && ['KeyW','KeyA','KeyS','KeyD','KeyQ','KeyE','Space'].includes(e.code)) e.preventDefault();

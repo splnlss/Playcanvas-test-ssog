@@ -6,24 +6,32 @@
   <main>
     <p class="eyebrow">PLAYCANVAS / SOG VIEWER</p>
     <h1 id="title">Streaming SOG viewer</h1>
-    <p id="status" role="status">Starting WebGL2…</p>
+    <p id="status" role="status">Starting renderer…</p>
     <div class="toolbar">
+      <label>Renderer <select id="backend"><option value="auto">Auto</option><option value="webgpu">WebGPU</option><option value="webgl2">WebGL2</option></select></label>
       <button id="enter" disabled>Enter VR</button>
       <label>Controls <select id="mode" disabled><option value="orbit">Orbit</option><option value="fly">Fly</option></select></label>
       <button id="reset" disabled>Reset view</button>
+      <button id="copy-camera" disabled>Copy camera</button>
       <button id="retry">Reload scene</button>
     </div>
     <div class="toolbar quality">
       <label>VR quality <select id="quality" disabled><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></label>
       <label><input id="auto" type="checkbox" disabled> Auto quality in VR</label>
     </div>
+    <p id="backend-status" role="status"></p>
+    <details id="camera-details"><summary>Saved camera</summary>
+      <p id="camera-status" role="status">Copy camera captures the current view as JSON.</p>
+      <textarea id="camera-json" aria-label="Saved camera JSON" readonly rows="8"></textarea>
+      <button id="copy-saved-camera" disabled>Copy saved camera</button>
+    </details>
     <p id="metrics">Waiting for first content</p>
     <details><summary>Controls &amp; scene info</summary>
       <p><strong>Orbit:</strong> left drag to rotate, right drag to pan, wheel to zoom.</p>
       <p><strong>Fly:</strong> select Fly, then click the scene. Mouse looks; WASD moves; Q/E moves down/up. Shift boosts speed. Escape releases the mouse.</p>
       <p><strong>VR:</strong> left stick flies horizontally; right stick moves up/down or snap-turns. Left X opens/closes the menu and pauses flight. Point the right controller at a button and press its trigger. Menu includes Reset, Exit, and quality/FPS controls.</p>
       <p>Flight passes through geometry. Walking collision and avatars are planned separately. VR quality chooses the next headset preset; desktop uses its configured budget. This viewer renders on the device opening the page.</p>
-      <p>Replace models through <code>src/config.ts</code>. Supplied links: <a href="?scene=ronda">Ronda Lobato</a> · <a href="?scene=sample">streamed sample</a> · <a href="?scene=single">single SOG</a>.</p>
+      <p>Replace models through <code>src/config.ts</code>. Supplied links: <a href="?scene=ronda">Ronda Lobato (SH0)</a> · <a href="?scene=ronda-full">Ronda original</a> · <a href="?scene=sample">streamed sample</a> · <a href="?scene=single">single SOG</a>.</p>
     </details>
   </main>
   <footer><a id="credit" target="_blank" rel="noopener"></a> · <a id="license" target="_blank" rel="noopener">CC BY 4.0</a></footer>
