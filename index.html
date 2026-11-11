@@ -4,12 +4,19 @@
 <body>
   <canvas id="viewer" aria-label="Gaussian splat scene" tabindex="0"></canvas>
   <main>
+    <div class="toolbar panel-actions">
+      <button id="start-guide" disabled>Start guide preview</button>
+      <button id="enter" disabled>Enter VR</button>
+      <button id="panel-toggle" aria-controls="panel-content" aria-expanded="false">Settings</button>
+    </div>
+    <p id="guide-status" role="status">Waiting for scene</p>
+    <p id="guide-caption" aria-live="polite"></p>
+    <div id="panel-content" hidden>
     <p class="eyebrow">PLAYCANVAS / SOG VIEWER</p>
     <h1 id="title">Streaming SOG viewer</h1>
     <p id="status" role="status">Starting renderer…</p>
     <div class="toolbar">
       <label>Renderer <select id="backend"><option value="auto">Auto</option><option value="webgpu">WebGPU</option><option value="webgl2">WebGL2</option></select></label>
-      <button id="enter" disabled>Enter VR</button>
       <label>Controls <select id="mode" disabled><option value="orbit">Orbit</option><option value="fly">Fly</option></select></label>
       <button id="reset" disabled>Reset view</button>
       <button id="copy-camera" disabled>Copy camera</button>
@@ -17,14 +24,12 @@
     </div>
     <div class="toolbar quality">
       <label>VR quality <select id="quality" disabled><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></label>
-      <label><input id="auto" type="checkbox" disabled> Auto quality in VR</label>
+      <label><input id="auto" type="checkbox" checked disabled> Auto quality in VR</label>
     </div>
-    <details class="guide-controls" open>
+    <details class="guide-controls">
       <summary>Guide pose prototype</summary>
       <p>Temporary mannequin · guessed route · collision not implemented. Starts 4 m to the right, approaches, turns and sits. Speech uses the first 30 seconds of the supplied recording, with automatic captions.</p>
-      <p id="guide-status" role="status">Waiting for scene</p>
       <div id="guide-buttons" class="toolbar"></div>
-      <p id="guide-caption" aria-live="polite"></p>
       <p><a href="?guide=fixture">Open synthetic guide fixture</a></p>
     </details>
     <p id="backend-status" role="status"></p>
@@ -41,6 +46,7 @@
       <p>Flight passes through geometry. Walking collision and avatars are planned separately. VR quality chooses the next headset preset; desktop uses its configured budget. This viewer renders on the device opening the page.</p>
       <p>Replace models through <code>src/config.ts</code>. Supplied links: <a href="?scene=ronda">Ronda Lobato (SH0)</a> · <a href="?scene=ronda-full">Ronda original</a> · <a href="?scene=sample">streamed sample</a> · <a href="?scene=single">single SOG</a>.</p>
     </details>
+    </div>
   </main>
   <footer><a id="credit" target="_blank" rel="noopener"></a> · <a id="license" target="_blank" rel="noopener">CC BY 4.0</a></footer>
   <script type="module" src="/src/main.ts"></script>

@@ -10,3 +10,12 @@ main{max-width:380px;padding:18px}.toolbar button,.toolbar select{font-size:13px
 #status{overflow-wrap:anywhere}
 
 #camera-json{display:block;width:100%;max-width:100%;margin:8px 0;font:12px/1.4 monospace;background:#102028;color:#ecf3ee;border:1px solid #608078;resize:vertical}
+
+[hidden]{display:none!important}
+.panel-actions{flex-wrap:nowrap;gap:6px}
+.panel-actions button{padding:7px 9px}
+#panel-toggle{margin-left:auto;font-size:12px;padding:7px}
+#start-guide{background:#32715d}
+main:has(#panel-content[hidden]){max-width:440px;width:fit-content;padding:12px}
+#guide-status{font-size:12px;margin:8px 0 0}
+#guide-caption:empty{display:none}

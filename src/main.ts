@@ -18,6 +18,14 @@ const mode = element<HTMLSelectElement>('mode');
 const qualitySelect = element<HTMLSelectElement>('quality');
 const auto = element<HTMLInputElement>('auto');
 const reset = element<HTMLButtonElement>('reset');
+const primaryGuideButton = element<HTMLButtonElement>('start-guide');
+const panelToggle = element<HTMLButtonElement>('panel-toggle');
+const panelContent = element('panel-content');
+panelToggle.addEventListener('click', () => {
+  panelContent.hidden = !panelContent.hidden;
+  panelToggle.setAttribute('aria-expanded', String(!panelContent.hidden));
+  panelToggle.textContent = panelContent.hidden ? 'Settings' : 'Collapse';
+});
 
 async function start() {
   const fixture = new URLSearchParams(location.search).get('guide') === 'fixture';
@@ -49,16 +57,17 @@ async function start() {
   const guideButtons = element('guide-buttons');
   const rebuildGuide = () => {
     guide?.destroy(); guide = createGuide(viewer, fixture, scene.id); guide.setEnabled(false);
-    guideButtons.replaceChildren(...guide.actions.map(action => {
+    guideButtons.replaceChildren(...guide.actions.slice(1).map(action => {
       const button = document.createElement('button'); button.textContent = action.label();
       button.addEventListener('click', () => { action.run(); refreshGuide(); }); return button;
     }));
   };
+  primaryGuideButton.addEventListener('click', () => { guide?.actions[0].run(); refreshGuide(); });
   const refreshGuide = () => {
     if (!guide) return;
-    element('guide-status').textContent = guide.status();
+    element('guide-status').textContent = loading || viewer.loading.state !== 'ready' ? status.textContent : guide.status();
     element('guide-caption').textContent = guide.caption;
-    [...guideButtons.children].forEach((button, i) => { (button as HTMLButtonElement).disabled = !guide!.available || guide!.actions[i].enabled?.() === false || loading || viewer.loading.state !== 'ready'; button.textContent = guide!.actions[i].label(); });
+    [primaryGuideButton, ...guideButtons.children].forEach((button, i) => { (button as HTMLButtonElement).disabled = !guide!.available || guide!.actions[i].enabled?.() === false || loading || viewer.loading.state !== 'ready'; button.textContent = guide!.actions[i].label(); });
   };
   const vr = createXr(viewer,desktop,quality,scene,cameraCopy,
     Array.from({ length: 8 }, (_, i) => ({ label: () => guide?.actions[i].label() ?? 'Guide unavailable', run: () => guide?.actions[i].run(), enabled: () => !!guide?.available && guide.actions[i].enabled?.() !== false })),

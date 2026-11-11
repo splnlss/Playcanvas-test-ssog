@@ -43,3 +43,8 @@ it('keeps Auto selected before entry and starts fresh performance measurements',
   for (let i = 0; i < 80; i++) q.update(0.05, 72);
   expect(q.state.preset).toBe('low');
 });
+
+it('enables automatic quality on a fresh viewer', () => {
+  const q = createQuality(() => {}, profiles);
+  expect(q.state.auto).toBe(true);
+});

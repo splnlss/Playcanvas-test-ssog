@@ -13,7 +13,7 @@ export function createGuide(viewer: Viewer, fixture: boolean, sceneId: string) {
   const sequence = createGuideSequence(voice);
   const placement = guidePlacement(sceneId, fixture);
   const presentation = createGuidePresentation(viewer.app, fixture, placement ?? guidePlacement('', true)!);
-  let enabled = false, muted = false, captions = true, volume = 1, notice = '';
+  let enabled = false, muted = false, captions = false, volume = 1, notice = '';
   const gesture = (action: () => void) => {
     if (!enabled) return;
     void voice.unlock().catch(error => { notice = `Enable audio: ${error instanceof Error ? error.message : error}`; });

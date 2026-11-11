@@ -1,7 +1,7 @@
 import type { QualityProfile, SceneConfig } from './config';
 export type Preset = 'low' | 'medium' | 'high';
 export function createQuality(apply: (p: QualityProfile) => void, profiles: SceneConfig['vrProfiles']) {
-  let preset: Preset = 'medium', auto = false, fps = 0;
+  let preset: Preset = 'medium', auto = true, fps = 0;
   let seconds = 0, frames = 0, slow = 0, fast = 0, sinceChange = Infinity;
   const levels: Preset[] = ['low', 'medium', 'high'];
   const choose = (value: Preset) => { preset = value; slow = fast = 0; sinceChange = 0; apply(profiles[value]); };
