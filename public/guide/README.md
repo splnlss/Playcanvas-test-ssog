@@ -22,3 +22,5 @@ rhubarb --quiet -f json -r pocketSphinx -d dialog.txt -o mouth-cues.json intro.w
 The original Rhubarb timing labels are retained in `ronda-intro-30s.rhubarb.json`. For the diagnostic mannequin, the mapping is A→M (closed lips), B→E (0.45), C→A (0.65), D→A (1), E→O (0.6), F→O (1), G→E (0.6), H→E (0.8), X→neutral. This is a simplified visual mapping, not production facial-rig acceptance. Caption and mouth intervals use actual media seconds and fit the 30-second duration.
 
 Runtime configuration lives in `src/guide/ronda-speech.json`. Audio is served from the same origin at `/guide/ronda-intro-30s.mp3`, so playback does not fetch the full source recording or depend on its CORS settings.
+
+The Ronda package applies a 0.10-second mouth lead after user feedback that the mouth appeared late. Only facial cue sampling is advanced; audio and caption timing stay at the actual media position. Adjust `mouthLeadSeconds` in `src/guide/ronda-speech.json` within 0–0.3 seconds for further visual calibration.

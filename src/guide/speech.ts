@@ -4,6 +4,8 @@ import type { Vec3Tuple } from '../movement';
 type Interval = { start: number; end: number };
 export type SpeechPackage = {
   audioUrl: string; audioRevision: string; cueAudioRevision: string;
+  /** Advance facial cues in media seconds to compensate for perceived visual lag. */
+  mouthLeadSeconds?: number;
   captions: (Interval & { text: string })[];
   cues: (Interval & { viseme: string; weight: number })[];
 };
@@ -13,6 +15,8 @@ const visemes = new Set(['neutral', 'A', 'E', 'O', 'M']);
 /** Small prototype vocabulary; production rig/cue mappings must be validated separately. */
 export function validateSpeech(content: SpeechPackage, duration?: number) {
   if (!content.audioUrl.trim() || !content.audioRevision.trim() || content.audioRevision !== content.cueAudioRevision) throw new Error('Audio and cue revision must match.');
+  const lead = content.mouthLeadSeconds ?? 0;
+  if (!Number.isFinite(lead) || lead < 0 || lead > 0.3) throw new Error('Mouth lead must be between 0 and 0.3 seconds.');
   if (!content.cues.length || !content.captions.length) throw new Error('Final recording needs checked captions and mouth cues.');
   for (const intervals of [content.captions, content.cues]) {
     let end = 0;
@@ -28,10 +32,11 @@ export function validateSpeech(content: SpeechPackage, duration?: number) {
 export function sampleSpeech(content: SpeechPackage, time: number, active: boolean) {
   if (!active || !Number.isFinite(time)) return { caption: '', weights: {} as Record<string, number> };
   const caption = content.captions.find(c => time >= c.start && time < c.end)?.text ?? '';
-  const cue = content.cues.find(c => time >= c.start && time < c.end);
+  const mouthTime = time + (content.mouthLeadSeconds ?? 0);
+  const cue = content.cues.find(c => mouthTime >= c.start && mouthTime < c.end);
   const weights: Record<string, number> = {};
   if (cue && cue.viseme !== 'neutral') {
-    const blend = Math.min(1, (time - cue.start) / 0.04, (cue.end - time) / 0.04);
+    const blend = Math.min(1, (mouthTime - cue.start) / 0.04, (cue.end - mouthTime) / 0.04);
     weights[cue.viseme] = cue.weight * Math.max(0, blend);
   }
   return { caption, weights };

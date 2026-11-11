@@ -53,3 +53,11 @@ it('reports missing recordings rather than synthesizing or skipping speech', asy
   await expect(voice.play()).rejects.toThrow(/recording/i);
   expect(voice.snapshot.status).toBe('error'); expect(voice.snapshot.caption).toBe('');
 });
+it('advances mouth cues without advancing captions or animating blocked playback', () => {
+  const tuned = { ...content, mouthLeadSeconds: 0.1, captions: [{ start: 0.2, end: 2, text: 'Hello' }] };
+  expect(sampleSpeech(tuned, 0.15, true)).toEqual({ caption: '', weights: { A: 0.8 } });
+  expect(sampleSpeech(tuned, 0.15, false)).toEqual({ caption: '', weights: {} });
+  expect(sampleSpeech(tuned, 1.95, true).weights).toEqual({});
+  expect(() => validateSpeech({ ...tuned, mouthLeadSeconds: NaN })).toThrow(/mouth.*lead/i);
+  expect(() => validateSpeech({ ...tuned, mouthLeadSeconds: 1 })).toThrow(/mouth.*lead/i);
+});

@@ -976,5 +976,6 @@
     "captionsStatus": "automatic draft, not human-reviewed",
     "transcription": "mlx-whisper / mlx-community/whisper-small-mlx; English; name/place prompt: Joseph Lobato, Ronda Lobato, San Luis, Colorado",
     "mouthCues": "Rhubarb Lip Sync 1.14.0 / pocketSphinx with automatic transcript; mapped to prototype A/E/O/M/neutral"
-  }
+  },
+  "mouthLeadSeconds": 0.1
 }
