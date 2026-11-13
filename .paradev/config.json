@@ -1,0 +1,5 @@
+{
+  "setup": ["npm ci", "npm run prepare:sample", "npm run prepare:ronda"],
+  "teardown": [],
+  "run": ["npm run dev"]
+}
